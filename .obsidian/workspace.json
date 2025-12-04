@@ -189,8 +189,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 489.5,
-    "collapsed": true
+    "width": 489.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -210,9 +209,16 @@
   },
   "active": "5337f91874202797",
   "lastOpenFiles": [
+    "8a1a0b9d17cc4ddcf5eee874012b4236.webp",
+    "fd4fe2fc63bec928e6df4b3e5f0f5b65.webp",
+    "Pasted image 20251128140308.png",
+    "16a2c5b7133827bc83f9af9c3d262dab.webp",
+    "688b390674c2de47ce398d2ab8d2a3e5.webp",
+    "注册-登录改造需求.md",
+    "分布式算法/分布式架构.md",
+    "workspace",
     "12a6b7559b9ddc1027f4af1b733c0583.webp",
     "f645ffd118e06b9df740f0299ef7cf79.webp",
-    "分布式算法/分布式架构.md",
     "分布式算法/分布式架构.md~",
     "分布式算法/attachments/250928-165006.avif",
     "分布式算法/attachments/250928-164940.avif",
@@ -220,11 +226,6 @@
     "work/钱包-中台对账流程.md",
     "work",
     "Pasted image 20250828111816.png",
-    "Pasted image 20250827170415.png",
-    "Pasted image 20250827151902.png",
-    "Pasted image 20250827151040.png",
-    "Pasted image 20250826172442.png",
-    "Pasted image 20250826134455.png",
     "分布式算法/分布式算法.md",
     "Reading Book/DDIA读书笔记.md",
     "消息队列/消息队列基础.md",
@@ -241,7 +242,6 @@
     "mysql/基础篇.md",
     "java/日期API.md",
     "内存知识.pdf.md",
-    "未命名.md",
     "未命名 1.md",
     "未命名 2.md",
     "未命名 3.md",
@@ -255,7 +255,6 @@
     "note/linux",
     "note/redis",
     "cs-note/redis",
-    "cs-note/linux",
     "Untitled.canvas"
   ]
 }
