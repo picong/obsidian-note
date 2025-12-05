@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "e6fa4fa68e26865b",
+        "id": "220a4d0f27318dce",
         "type": "tabs",
         "children": [
           {
-            "id": "5337f91874202797",
+            "id": "7692f7a27e886578",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -189,7 +189,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 489.5
+    "width": 489.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -207,32 +208,37 @@
       "markdown-importer:打开 Markdown 格式转换器": false
     }
   },
-  "active": "5337f91874202797",
+  "active": "7692f7a27e886578",
   "lastOpenFiles": [
-    "8a1a0b9d17cc4ddcf5eee874012b4236.webp",
-    "fd4fe2fc63bec928e6df4b3e5f0f5b65.webp",
-    "Pasted image 20251128140308.png",
-    "16a2c5b7133827bc83f9af9c3d262dab.webp",
-    "688b390674c2de47ce398d2ab8d2a3e5.webp",
-    "注册-登录改造需求.md",
-    "分布式算法/分布式架构.md",
-    "workspace",
-    "12a6b7559b9ddc1027f4af1b733c0583.webp",
-    "f645ffd118e06b9df740f0299ef7cf79.webp",
+    "分布式算法/attachments/251205-162719.png.tmp",
+    "分布式算法/attachments/251205-162719.png",
+    "分布式算法/attachments/251205-162646.png.tmp",
+    "分布式算法/attachments/251205-162646.png",
+    "分布式算法/attachments/251205-162621.png.tmp",
+    "分布式算法/attachments/251205-162621.png",
+    "分布式算法/attachments/251205-162559.png.tmp",
+    "分布式算法/attachments/251205-162559.png",
+    "分布式算法/attachments/251205-162459.png.tmp",
+    "分布式算法/attachments/251205-162459.png",
+    "分布式算法/attachments/251205-154908.png.tmp",
+    "分布式算法/attachments/251205-154908.png",
     "分布式算法/分布式架构.md~",
-    "分布式算法/attachments/250928-165006.avif",
-    "分布式算法/attachments/250928-164940.avif",
-    "分布式算法/attachments/250928-164922.avif",
+    "分布式算法/attachments/251205-153920.png.tmp",
+    "分布式算法/attachments/251205-153920.png",
+    "分布式算法/4913",
+    "分布式算法/attachments/251204-162017.png.tmp",
+    "分布式算法/attachments/251204-162017.png",
+    "分布式算法/attachments/251204-161833.png.tmp",
+    "分布式算法/attachments/251204-161833.png",
+    "分布式算法/attachments/251204-154041.avif",
+    "分布式算法/分布式架构.md",
+    "注册-登录改造需求.md",
     "work/钱包-中台对账流程.md",
-    "work",
-    "Pasted image 20250828111816.png",
     "分布式算法/分布式算法.md",
     "Reading Book/DDIA读书笔记.md",
     "消息队列/消息队列基础.md",
     "go/go基础篇.md",
-    "分布式算法",
     "java/微服务架构设计模式读书笔记.md",
-    "go",
     "java/java并发编程.md",
     "java/分布式基础知识.md",
     "spring源码系列/Spring gateway源码剖析.md",
@@ -250,11 +256,6 @@
     "Nosql/Redis核心技术与实战.md",
     "Nosql/Redis cluster 搭建.md",
     "Nosql/Redis.md",
-    "java",
-    "消息队列",
-    "note/linux",
-    "note/redis",
-    "cs-note/redis",
     "Untitled.canvas"
   ]
 }
