@@ -210,9 +210,15 @@
   },
   "active": "7692f7a27e886578",
   "lastOpenFiles": [
+    "分布式算法/深入理解Kubernetes笔记.md~",
+    "分布式算法/4913",
+    "分布式算法/attachments/251209-175214.png.tmp",
+    "分布式算法/attachments/251209-175214.png",
+    "分布式算法/attachments/251208-171047.png.tmp",
+    "分布式算法/attachments/251208-171047.png",
+    "分布式算法/分布式架构.md~",
     "分布式算法/分布式架构.md",
     "分布式算法/深入理解Kubernetes笔记.md",
-    "分布式算法/分布式架构.md~",
     "分布式算法/attachments/251205-173337.png.tmp",
     "分布式算法/attachments/251205-173337.png",
     "分布式算法/attachments/251205-173301.png.tmp",
@@ -225,13 +231,8 @@
     "分布式算法/attachments/251205-162719.png",
     "分布式算法/attachments/251205-162646.png.tmp",
     "分布式算法/attachments/251205-162646.png",
-    "分布式算法/attachments/251205-162621.png.tmp",
     "分布式算法/attachments/251205-162621.png",
-    "分布式算法/attachments/251205-162559.png.tmp",
     "分布式算法/attachments/251205-162559.png",
-    "分布式算法/attachments/251205-162459.png.tmp",
-    "分布式算法/attachments/251205-162459.png",
-    "分布式算法/attachments/251205-154908.png",
     "注册-登录改造需求.md",
     "work/钱包-中台对账流程.md",
     "分布式算法/分布式算法.md",
@@ -255,7 +256,6 @@
     "dubbo/Mysql.md",
     "Nosql/Redis核心技术与实战.md",
     "Nosql/Redis cluster 搭建.md",
-    "Nosql/Redis.md",
     "Untitled.canvas"
   ]
 }
