@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 293.5,
-    "collapsed": true
+    "width": 293.5
   },
   "right": {
     "id": "3f3db18367300875",
@@ -210,6 +209,8 @@
   },
   "active": "7692f7a27e886578",
   "lastOpenFiles": [
+    "work/钱包流程细节梳理.md",
+    "分布式算法/深入理解Kubernetes笔记.md",
     "分布式算法/深入理解Kubernetes笔记.md~",
     "分布式算法/4913",
     "分布式算法/attachments/251209-175214.png.tmp",
@@ -218,7 +219,6 @@
     "分布式算法/attachments/251208-171047.png",
     "分布式算法/分布式架构.md~",
     "分布式算法/分布式架构.md",
-    "分布式算法/深入理解Kubernetes笔记.md",
     "分布式算法/attachments/251205-173337.png.tmp",
     "分布式算法/attachments/251205-173337.png",
     "分布式算法/attachments/251205-173301.png.tmp",
@@ -229,7 +229,6 @@
     "分布式算法/attachments/251205-173145.png",
     "分布式算法/attachments/251205-162719.png.tmp",
     "分布式算法/attachments/251205-162719.png",
-    "分布式算法/attachments/251205-162646.png.tmp",
     "分布式算法/attachments/251205-162646.png",
     "分布式算法/attachments/251205-162621.png",
     "分布式算法/attachments/251205-162559.png",
