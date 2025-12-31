@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 293.5
+    "width": 293.5,
+    "collapsed": true
   },
   "right": {
     "id": "3f3db18367300875",
@@ -209,10 +210,10 @@
   },
   "active": "7692f7a27e886578",
   "lastOpenFiles": [
-    "work/钱包流程细节梳理.md",
-    "分布式算法/深入理解Kubernetes笔记.md",
     "分布式算法/深入理解Kubernetes笔记.md~",
     "分布式算法/4913",
+    "work/钱包流程细节梳理.md",
+    "分布式算法/深入理解Kubernetes笔记.md",
     "分布式算法/attachments/251209-175214.png.tmp",
     "分布式算法/attachments/251209-175214.png",
     "分布式算法/attachments/251208-171047.png.tmp",
@@ -254,7 +255,6 @@
     "dubbo/dubbo源码学习.md",
     "dubbo/Mysql.md",
     "Nosql/Redis核心技术与实战.md",
-    "Nosql/Redis cluster 搭建.md",
     "Untitled.canvas"
   ]
 }
