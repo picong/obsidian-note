@@ -920,3 +920,160 @@ Job通过两个关键参数控制并行计算：
     + Allow(默认): 允许多个Job同时存在。
     + Forbid：不会不会创建新的Pod，该创建周期被跳过。
     + Replace：新Job替换还没完的旧Job。
+
+---
+
+## Kubernetes声明式API与编程范式
+### 1. 核心概念对比：命令式vs.声明式
+这是理解k8s运行机制的第一步。
+| 模式 | 代表操作 | 核心逻辑 | 缺点/局限 |
+| --------------- | --------------- | --------------- | --------------- |
+| 命令式命令行 | docker run/docker service update | 直接下达动作指令 | 难以记录中间状态，不适合大规模自动化。 |
+| 命令式配置文件 | kubectl create/kubectl replace | 将参数写在文件里，但底层仍是替换原有对象 | 无法处理多个客户端同时修改一个对象的情况(会冲突) |
+| 声明式API | kubectl apply | 只声明"最终状态",系统自动计算并执行Patch（增量更新） | 需要系统具备强大的Merge能力和控制循环。 |
+
+
+---
+
+### 2. 为什么声明式API是k8s的灵魂？
+- 具备Merge能力：支持多个写端(如不同的Controller)同时对一个对象进行修改，而不会互相覆盖。
+- 无需认为干预：系统通过"控制循环 (Controller Loop)"不断对比"实际状态"与"期望状态",自动进行调解(Reconcile)。
+- 下线更新：支持在不中断业务的前提下，对API对象进行细粒度的修改。
+
+---
+
+### 3. 实战案例：Istio与Sidecar注入
+Istio如何在用户"无感"的情况下，往Pod里塞进一个Envoy代理？
+
+技术原理：Dynamic Admission Control(动态准入控制)
+1. Initializer(初始化器)：在Pod真正创建前，API Server会先调用Initializer。
+2. 自动注入流程：
+  a. 用户提交一个普通的Pod YAML。
+  b. Initializer控制器捕捉到这个新建Pod的信号。
+  c. 控制器读取ConfigMap中的Envoy配置。
+  d. 使用TwoWayMergePatch技术，将Envoy的容器定义"合并"进原始Pod对象中。
+  e. 完成注入后，清楚`pengding`状态，Pod正式由系统调度创建。
+
+注：虽然现在Istio更多使用`MutatingAdmissionWebHook`(准入钩子),但其背后的声明式Patch思路是一脉相承的。
+
+---
+
+### 4. Kubernetes编程范式(Summary)
+Kubernetes编程范式 = 声明式API + 自定义控制器(Custom Controller)
+
+- 声明式API：定义你的"期望状态"(CRD)。
+- 控制器：一个死循环，不断观察集群状态，一旦发现实际与期望不符，就发起`PATCH`请求。
+
+---
+
+## 深入解析API对象的奥秘
+### 1. API对象的组织"三围"：GVR
+在k8s中，定位一个资源不需要"经纬度",只需要GVR：
+
+- Group(Api组)：功能分类(如`batch`为离线业务，核心资源如Pod的Group为空)。
+- Version(Api版本)：版本管理(如`v1`,`v1alpha1`)，保证向后兼容。
+- Resource(资源类型)：具体的对象名(如`CronJob`,`Deployment`)。
+
+完整示例：`apis/batch/v2alpha1/cronjobs`
+
+
+![api对象的树形结构](./attachments/260114-101039.png)
+
+---
+
+### 2. 一个YAML的"入库"之旅
+当你执行kubectl apply时，ApiServer内部经历了一场复杂的"流水线加工"：
+
+1. 过滤与预处理：认证(你是谁?)、授权(你能干啥？)、审计(记录你的操作)。
+2. MUX与Routes匹配：根据URL找到对应的Handler。
+3. Convert(版本转换)：将不同版本的YAML转换为Super Version(所有版本的并集)，统一处理逻辑。
+4. Admission(准入控制)：执行Initializer或WebHook，进行动态修改(如注入Sidecar)。
+5. Validation(验证)：检查字段合法性。
+6. Registry(登记)：通过验证的对象进入Registry数据结构。
+7. 持久化：序列化后存入Etcd。
+
+
+![api对象创建流程](./attachments/260114-103455.png)
+
+---
+
+### 3. CRD：让k8s认识你的"新物种"
+CRD(Custom Resource Definition)允许你香K8s注册自定义资源。
+
+如何创建一个自定义资源(以Network为例)?
+要让k8s认识并处理你的"新物种"，需要两步走：
+
+| 步骤 | 类比 | 操作内容 |
+| --------------- | --------------- | --------------- |
+| 定义CRD(宏观) | 告诉电脑"什么是兔子" | 编写CRD YAML，声明Group/Version/Kind(Network) |
+| 描述CR(微观) | 告诉电脑"这只兔子长啥样" | 编写代码(types.go)定义具体的字段(如cidr，gateway) |
+
+
+---
+
+### 4. 自动化生产线：代码生成工具
+K8s及其复杂，手动写API转换和客户端代码很麻烦。所以官方提供了code-generator：
+
+- Input：你在`types.go`里写的结构体 + 特殊注释(Tags)。
+- Output：
+  * DeepCopy：对象的深拷贝方法。
+  * Clientset：操作该资源的客户端。
+  * Informers/Listers：高效监听资源变化的核心组件。
+注：你会发现即使不写代码，只apply一个CRD YAML，kubectl get 也能生效。那是由于K8s帮你存了"原始数据"，但要实现业务逻辑(比如真去创建一个网络)，必须依靠生成的代码编写Controller。
+
+---
+
+## Kubernetes自定义控制器(Custom Controller)深度笔记
+### 1. 核心哲学：声明式API与控制循环
+Kubernetes的本质是一个状态协调器。
+
+- 期望状态(Desired State)：用户通过YAML提交给API Server的对象。
+- 实际状态(Actual State)：集群中物理资源的真实情况(如Neutron中的网络、云上的负载均衡等)。
+- 控制循环(Control Loop)：控制器的核心逻辑，即不断对比"期望"与"实际"，如果不一致，则执行草哟使其趋向一致。
+
+---
+
+### 2. 关键组件：Informer机制
+
+![自定义控制器的工作流程示意图](./attachments/260114-183141.png)
+
+Informer是链接API Server与控制器的桥梁，其设计目标是高效、异步、减压。
+
+1. Reflector(反射器)：通过`ListAndWatch`接口从API Server获取数据：
+  a. List：启动时获取所有对象的最新版本。
+  b. Watch：之后通过长连接实时监听对象的变化(Added,Updated,Deleted)。
+2. Delta FIFO Queue(增量队列)：存储Reflector捕获到的变化事件(成为Delta)。
+3. Indexer & Local Store(本地缓存)：Informer会将对象缓存到本地内存中：
+  a. 优点：控制器查询对象时直接访问内存，无需高频请求API Server，极大地降低了Master节点压力。
+4. ResourceEventHandler(时间回调)：开发人员注册 `Add/Update/Delete`方法，将受影响对象的key(`<namespace>/<name>`)推入工作队列。
+
+---
+
+### 3. 编写控制器的三部曲
+
+1. 初始化(Main函数)：
+  a. 创建Clientset：初始化与API Server通信的客户端。
+  b. 启动Infromer Factory：为特定的API对象(如NetWork或Deployment)创建Informer。
+  c. 示例化Controller：将Informer传递给自定义控制器。
+
+1. 注册Handler与同步本地缓存：
+  a. 在创建控制器时向Informer中注册回调函数。
+  b. 注意：入队的是Key而非对象本身。这保证了即使处理速度慢，控制循环拿到的永远是本地缓存里最新的对象状态。
+
+1. 执行控制循环(SyncHandler)：
+  a. 从WorkQueue获取Key。
+  b. 使用Key从Lister(本地缓存)获取期望对象。
+  c. 调用外部API(如Neutron API)获取实际资源状态。
+  d. 对比与操作：
+    - 不存在则创建
+    - 存在但配置不符则更新
+    - 若缓存中已不存在该Key对应的对象，则从外部环境删除物理资源。
+
+---
+
+### 4. 思考题
+
+- 为什么Informer和控制循环之间要加一个工作队列：
+  * 解耦与限速：内部Informer是时间产生速度可能极快，而外部API(如创建云网络)可能很慢。工作队列起到缓冲作用。
+  * 去重与合并：如果一个对象短时间内更新了10次，队列可以保证控制循环只处理最终状态，避免无效的中间操作。
+  * 错误重试：如果某次协调失败，可以将Key重新入队，利用队列的延迟重试机制进行容错。
