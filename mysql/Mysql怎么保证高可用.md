@@ -42,7 +42,7 @@ seconds_behind_master的算方法是这样的：
 3. 传到备库应用的时候，相同commit_id的事务分发到多个worker执行；
 4. 这一组全部执行完成后，coordinator再去取下一批。
 但是，这个策略有一个问题，它并没有实现"真正的模拟主库并发度"这个目标。在主库上，一组事务在commit的时候，下一组事务是同时处于 "执行中"状态的。
-![[Pasted image 20231229173451.png]]
+![[attachments/Pasted image 20231229173451.png]]
 可以看到，在备库上执行的时候，要等第一组事务完全执行完成后，第二组事务才能开始执行，这样系统的吞吐量就不够。
 另外，这个方案很容易被大事务拖后腿。
 
@@ -50,7 +50,7 @@ seconds_behind_master的算方法是这样的：
 在MariaDB并行复制实现之后，官方的Mysql5.7版本也提供了类似的功能，由参数slave-parallel-type来控制并行复制策略：
 1. 配置为DATABASE，表示使用Mysql 5.6版本的按库并行策略；
 2. 配置为LOGICAL_CLOCK，表示的就是类似MariaDB的策略。不过，Mysql 5.7这个策略，针对并行度做了优化。
-3. ![[Pasted image 20231229174207.png]]
+3. ![[attachments/Pasted image 20231229174207.png]]
 其实，不用等到commit阶段，只要能够到达redo log prepare阶段，就表示事务已经通过锁冲突的检验了。
 
 Mysql 5.7并行复制策略的思想是：
@@ -77,7 +77,7 @@ Mysql增加了一个新的并行复制策略，基于WRITESET的并行复制。
 ```shell
 mysqlbinlog File --stop-datetime=T --start-date=T
 ```
-![[Pasted image 20231229181306.png]]
+![[attachments/Pasted image 20231229181306.png]]
 1. 在从库B上，由于同步了binlog，R这一行已经存在；
 2. 在新主库A’上，R这一行也已经存在，日志写在123这个位置之后的；
 3. 我们在主库B上执行change master命令，指向A‘的File文件的123位置，就会把插入R这一行数据的binlog又同步到从库B去执行。

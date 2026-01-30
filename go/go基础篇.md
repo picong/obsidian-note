@@ -1,5 +1,5 @@
-## go的常用配置项
-![[Pasted image 20250619095010.png]]
+﻿## go的常用配置项
+![[attachments/Pasted image 20250619095010.png]]
 ## 通过go mod构建模块
 ```shell
 # 初始化go模块
@@ -94,7 +94,7 @@ Go语言最初发布时内置的构建模式为GOPATH构建模式。在这种构
 那么，为了支持可重现构建，Go 1.5版本引入了vendor机制，开发者可以在项目目录下缓存项目的所有依赖，实现可重现构建。但vendor机制依旧不够完善，开发者还需要手工管理vendor下的依赖包，这就给开发者带来了不小的心智负担。
 
 后来，Go 1.11版本中，Go核心团队推出了新一代构建模式：Go Module以及一系列创新机制，包括语义导入版本机制、最小版本选择机制等。语义导入版本机制是Go Moudle其他机制的基础，它是通过在包导入路径中引入主版本号的方式，来区别同一个包的不兼容版本。而且，Go命令使用**最小版本选择**机制进行包依赖版本选择，这和当前主流编程语言，以及Go社区之前的包依赖管理工具使用的算法都有点不同。
-![[Pasted image 20250619141346.png]]
+![[attachments/Pasted image 20250619141346.png]]
 **如上图所示，符合项目整体要求的"最小版本"是v1.3.0。**
 
 此外，Go命令还可以通过GO111MODULE环境变量进行Go构建模式的切换。但你要注意，从Go 1.11到Go 1.16，不同的Go版本在GO111MODULE为不同值的情况下，开启的构建模式以及具体表现行为也几经变化，这里你重点看一下前面总结的表格。
@@ -103,7 +103,7 @@ Go语言最初发布时内置的构建模式为GOPATH构建模式。在这种构
 
 ## go程序的执行次序
 ### go包的初始化次数
-![[Pasted image 20250619165828.png]]
+![[attachments/Pasted image 20250619165828.png]]
 - 依赖包按"深度优先"的次序进行初始化；
 - 每个包内按以"常量 -> 变量 -> init函数"的顺序进行初始化；
 - 包内的多个init函数按出现次序进行自动调用。
@@ -153,7 +153,7 @@ func init() {
 - 每个init函数在整个Go程序生命周期内仅会被执行一次；
 - init函数是顺序执行的，只有当一个init函数执行完毕后，才会去执行下一个init函数。
 ## 变量声明
-![[Pasted image 20250620170103.png]]
+![[attachments/Pasted image 20250620170103.png]]
 ## 代码块与作用域
 代码块有显式与隐式之分，显式代码块就是包裹在一对配对大括号内部的语句序列，而隐式代码块则不容易肉眼分辨，它是通过Go语言规范明确规定的。隐式代码块有五种，分别是宇宙代码块、包代码块、文件代码块、分支控制语句隐式代码块，以及switch/select的子句隐式代码块，理解隐式代码块是理解代码块概念以及后续作用域概念的前提与基础。
 
@@ -182,12 +182,12 @@ v, ok := m["key"]  → v, ok := runtime.mapaccess2(maptype, m, "key")
 delete(m, "key")   → runtime.mapdelete(maptype, m, “key”)
 ```
 下图是map类型在Go运行时实现的示意图：
-![[Pasted image 20250623165401.png]]
+![[attachments/Pasted image 20250623165401.png]]
 hmap的结构的初始状态解释：
-![[Pasted image 20250623180606.png]]
+![[attachments/Pasted image 20250623180606.png]]
 
 bucket中tophash区域是用来快速定位key位置的：
-![[Pasted image 20250623181119.png]]
+![[attachments/Pasted image 20250623181119.png]]
 **key存储区域：**
 当我们声明一个map类型变量，比如var m map[string]int时，Go运行时就会为这个变量对应的特定map类型，生成一个runtime.maptype实例。如果这个实例已经存在，就会直接复用。maptype实例的结构是这样的：
 ```go
@@ -206,7 +206,7 @@ type maptype struct {
 
 **value存储区域**
 和key一样，这个区域的创建也是得到了maptype中信息的帮助。Go运行时采用了把key和value分开存储的方式，而不是采用一个kv接着一个kv的kv紧邻方式存储，这带来的其实是算法上的复杂性，但却减少了因内存对齐带来的内存浪费。
-![[Pasted image 20250623181353.png]]
+![[attachments/Pasted image 20250623181353.png]]
 另外，还有一点我要跟你强调一下，如果key或value的数据长度大于一定数值，那么运行时不会在bucket中直接存储数据，而是会存储key或value数据的指针。目前Go运行时定义的最大key和value的长度是这样的：
 ```go
 // $GOROOT/src/runtime/map.go
@@ -241,7 +241,7 @@ func mapassign(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {
 
 如果是因为当前数据数量超出LoadFactor指定水位而进行的扩容，那么运行时会建立一个**两倍于现有规模的bucket数组**，但真正的排空和迁移工作也是在assign和delete时逐步进行的。
 原bucket数组会挂在hmap的oldbuckets指针下面，直到原buckets数组中所有数据都迁移到新数组后，原buckets数组才会被释放。
-![[Pasted image 20250623181540.png]]
+![[attachments/Pasted image 20250623181540.png]]
 **map不支持并发的读写/写写并发操作**
 并发下面的读写错做可以使用[sync.Map](https://pkg.go.dev/sync#Map)来代替。
 

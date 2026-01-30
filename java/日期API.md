@@ -1,4 +1,4 @@
-LocalDate、LocalTime、LocalDateTime、Instant、Duration以及Period
+﻿LocalDate、LocalTime、LocalDateTime、Instant、Duration以及Period
 
 通过LocalDate#atTime方法或者LocalTime#atDate方法，可以创建一个LocalDateTime对象。也可以通过LocalDateTime#toLocalDate方法或者LocalDateTime#toLocalTime方法，从LocalDateTime中提取LocalDate或者LocalTime组件。
 
@@ -54,6 +54,6 @@ LocalDate date1 = LocalDate.of(2014, 3, 18);       ←---- 2014-03-18Local
 当然也可以通过DateTimeFormatterBuilder来构建更加复杂的格式化器。
 
 ### 使用时区
-![[Pasted image 20250219113847.png]]
+![[attachments/Pasted image 20250219113847.png]]
 ### 利用UTC/格林尼治时间的固定偏差计算时区
 另一种比较通用的表达时区的方式是利用当前时区和UTC/格林尼治的固定偏差。比如，基于这个理论，你可以说 "纽约落后于伦敦5小时"。

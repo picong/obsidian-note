@@ -30,7 +30,7 @@
 如果buffer pool的内存数据页的结果是最新的，查询的时候就直接读内存。buffer pool除了可以加速写，还可以加速读。
 而Buffer Pool对查询的加速效果，依赖于一个重要的指标，即：内存命中率。通过执行 `show engine innodb status`, 可以看到 "Buffer Pool hit rate" 字样，显示的就是当前的命中率，一般情况下，一个稳定服务的线上系统，要保证响应时间符合要求的话，内存命中率要在99%以上。InnoDB Buffer Pool的大小是由参数innodb_buffer_size确定的，一般建议设置为物理内存的 60%~80%。
 InnoDB内存管理采用LRU算法，但是InnoDB对该算法进行了改进，按照5:3的比例吧整个LRU链表分成了young 区域和 old区域。
-![[Pasted image 20240103152004.png]]
+![[attachments/Pasted image 20240103152004.png]]
 1. young区域中内存命中后，跟普通LRU一样，将命中的数据移动到链表头部。
 2. 但是要访问一个当前链表中不存在的数据页，如果Buffer Pool已满，需要淘汰掉链表尾部(也就是old区域的尾部page)，最新被访问的数据页在old区域的头部被插入。
 3. 处于old 区域的数据页，每次被访问的时候都要做下面这个判断：
@@ -59,7 +59,7 @@ select * from t1 straight_join t2 on (t1.a=t2.b);
 1. 把表t1的数据读入线程内存join_buffer中，由于我们这个语句中写的是 `select *`，因此是把整个表t1放入了内存；
 2. 扫描表t2，把表t2中的每一行取出来，跟join_buffer中的数据做对比，满足join条件的，作为结果集的一部分返回。
 这个过程的流程如下：
-![[Pasted image 20240103180332.png]]
+![[attachments/Pasted image 20240103180332.png]]
 如果join_buffer_size不足以容纳驱动表的所有行，需要进行分段join，假设分段次数为K，K越大扫描被驱动表的次数越多，而又由于分段join和不分段的join在内存中的判断次数是一样的，所以分段的次数越少越好，所以就有了两个优化的结论：
 1. 尽量用小表做为驱动表
 2. 当我们join语句很慢的时候，就可以通过吧join_buffer_size改大来优化。
@@ -81,7 +81,7 @@ set optimizer_switch='mrr=on,mrr_cost_based=off,batched_key_access=on';
 ```
 其中，前两个参数的作用是要启用MRR。这么做的原因是，BKA算法的优化要依赖于MRR。
 BKA算法的流程如下图：
-![[Pasted image 20240104145352.png]]
+![[attachments/Pasted image 20240104145352.png]]
 
 ## BNL 转 BKA
 一些情况下，我们可以直接在被驱动表上建索引，这时就可以直接转BKA算法了。
@@ -91,7 +91,7 @@ select * from t1 join t2 on (t1.b = t2.b) where t2.b >= 1 and t2.b <= 2000;
 ```
 
 ## 临时表在使用上有以下几个特点：
-![[Pasted image 20240104153111.png]]
+![[attachments/Pasted image 20240104153111.png]]
 1. 建表语法是 `create temporary table ...`。
 2. 一个临时表只能被创建它的session访问到，对其他线程不可见。所以，图中session A创建的临时表t，对于session B是不可见的。
 3. 临时表可以与普通表同名。
@@ -143,7 +143,7 @@ InnoDB的索引可以满足输入有序的条件，所以通过这个z的索引�
 ```sql
 select SQL_BIG_RESULT id%100 as m, count(*) as c from t1 group by m;
 ```
-![[Pasted image 20240105110721.png]]
+![[attachments/Pasted image 20240105110721.png]]
 从Extra字段可以看到，这个语句的执行没有再使用临时表，而是直接用了排序算法。以此来看，mysql8.0针对这种大数据量的group by还是会进行排序，不使用该提示的不会进行排序。
 
 **Mysql什么时候会使用内存临时目录？**

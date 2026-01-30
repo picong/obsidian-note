@@ -1,4 +1,4 @@
-## 管程
+﻿## 管程
 **定义**：**管程是指共享变量以及对共享变量的操作过程，让他们支持并发。** 
 
 在管程的发展史上，先后出现过三种不同的管程模型，分别是：Hasen模型、Hoare模型和MESA模型。其中，现在广泛应用的是MESA模型，并且Java管程的实现参考的也是MESA模型。
@@ -8,7 +8,7 @@
 在管程模型里，共享变量和对共享变量的操作是被封装起来的，图中最外层的框就代表封装的意思。框的上面只有一个入口，并且在入口旁边还有一个入口等待队列。当多个线程同时试图进入管程内部时，只允许一个线程进入，其他线程则在入口等待队列中等待。这个过程类似就医流程的分诊，只允许一个患者就诊，其他患者都在门口等待。
 
 管程里还引入了条件变量的概念，而且**每个条件变量都对应有一个等待队列，**如下图，条件变量A和条件变量B分别都有自己的等待队列。
-![[Pasted image 20250604185411.png]]
+![[attachments/Pasted image 20250604185411.png]]
 
 ### wait()的正确姿势
 MESA管程中有一个特有的编程范式：
@@ -29,7 +29,7 @@ while(条件不满足) {
 对于CPU密集型计算，多线程本质上是提升多核CPU的利用率，所以对于一个4核的CPU，每个核一个线程，理论上创建4个线程就可以了，再多创建线程也只是增加线程切换的成本。所以，**对于CPU密集型的计算场景，理论上“线程的数量=CPU核数”就是最合适的**。不过在工程上，**线程的数量一般会设置为“CPU核数+1”**，这样的话，当线程因为偶尔的内存页失效或其他原因导致阻塞时，这个额外的线程可以顶上，从而保证CPU的利用率。
 
 对于I/O密集型的计算场景，比如前面我们的例子中，如果CPU计算和I/O操作的耗时是1:1，那么2个线程是最合适的。如果CPU计算和I/O操作的耗时是1:2，那多少个线程合适呢？是3个线程，如下图所示：CPU在A、B、C三个线程之间切换，对于线程A，当CPU从B、C切换回来时，线程A正好执行完I/O操作。这样CPU和I/O设备的利用率都达到了100%。
-![[Pasted image 20250604195759.png]]
+![[attachments/Pasted image 20250604195759.png]]
 三线程执行示意图
 
 通过上面这个例子，我们会发现，对于I/O密集型计算场景，最佳的线程数是与程序中CPU计算和I/O操作的耗时比相关的，我们可以总结出这样一个公式：
@@ -273,19 +273,19 @@ public class CyclicBarrierTest {
 
 ## 并发容器
 并发容器虽然数量非常多，但依然是前面我们提到的四大类：List、Map、Set和Queue，下面的并发容器关系图，基本上把我们经常用的容器都覆盖到了。
-![[Pasted image 20250605154648.png]]
+![[attachments/Pasted image 20250605154648.png]]
 ### CopyOnWriteArrayList
 CopyOnWriteArrayList内部维护了一个数组，成员变量array就指向这个内部数组，所有的读操作都是基于array进行的，如下图所示，迭代器Iterator遍历的就是array数组。
-![[Pasted image 20250605154804.png]]
+![[attachments/Pasted image 20250605154804.png]]
 写操作，比如add操作，CopyOnWriteArrayList会将array复制一份，然后在新复制处理的数组上执行增加元素操作，执行完成后再将array指向这个新的数组。
-![[Pasted image 20250605154927.png]]
+![[attachments/Pasted image 20250605154927.png]]
 使用CopyOnWriteArrayList需要忍受的两个点：
 - CopyOnWriteArrayList仅适用于写操作非常少的场景，而且能够容忍读写的短暂不一致。例如上面的例子中，写入的新元素并不能立刻被遍历到。
 - 另一个需要注意的是，CopyOnWriteArrayList迭代器是只读的，不支持增删改。因为迭代器遍历的仅仅是一个快照，而对快照进行增删改是没有意义的。
 ### ConcurrentHashMap和ConcurrentSkipListMap
 ConcurrentHashMap的key是无序的，而ConcurrentSkipListMap的key是有序的。
 下面这个表格总结了Map相关的实现类对于key和value的要求：
-![[Pasted image 20250605155303.png]]
+![[attachments/Pasted image 20250605155303.png]]
 ConcurrentSkipListMap里面的SkipList本身就是一种数据结构，中文一般都翻译为“跳表”。跳表插入、删除、查询操作平均的时间复杂度是 O(log n)，理论上和并发线程数没有关系，所以在并发度非常高的情况下，若你对ConcurrentHashMap的性能还不满意，可以尝试一下ConcurrentSkipListMap。
 
 ### CopyOnWriteArraySet和ConcurrentSkipListSet
@@ -327,11 +327,11 @@ static <U> CompletableFuture<U>
 
 ### ComletionStage接口
 任务是有时序关系的，比如有**串行关系、并行关系、汇聚关系**等。
-![[Pasted image 20250605183948.png]]
+![[attachments/Pasted image 20250605183948.png]]
 串行关系
-![[Pasted image 20250605184004.png]]
+![[attachments/Pasted image 20250605184004.png]]
 并行关系
-![[Pasted image 20250605184012.png]]
+![[attachments/Pasted image 20250605184012.png]]
 汇聚关系
 
 ### **描述串行关系**
@@ -427,11 +427,11 @@ ForkJoinPool内部有多个任务队列，当我们通过ForkJoinPool的invoke()
 ForkJoinPool支持一种叫做“**任务窃取**”的机制，如果工作线程空闲了，那它可以“窃取”其他工作任务队列里的任务。
 
 ForkJoinPool中的任务队列采用的是双端队列，工作线程正常获取任务和“窃取任务”分别是从任务队列不同的端消费，这样能避免很多不必要的数据竞争。
-![[Pasted image 20250606135501.png]]
+![[attachments/Pasted image 20250606135501.png]]
 ## ThreadLocal
 原理：
 Thread这个类内部有一个私有属性threadLocals，其类型是ThreadLocalMap，ThreadLocalMap的key是ThreadLocal。
-![[Pasted image 20250609101606.png]]
+![[attachments/Pasted image 20250609101606.png]]
 在Java的实现方案里面，ThreadLocal仅仅是一个代理工具类，内部并不持有任何与线程相关的数据，所有和线程相关的数据都存储在Thread里面，这样的设计容易理解。
 这样设计，**不容易产生内存泄露**。ThreadLocal持有的Map会持有Thread对象的引用，这就意味着，只要ThreadLocal对象存在，那么Map中的Thread对象就永远不会被回收。ThreadLocal的生命周期往往都比线程要长，所以这种设计方案很容易导致内存泄露。而Java的实现中Thread持有ThreadLocalMap，而且ThreadLocalMap里对ThreadLocal的引用还是弱引用（WeakReference），所以只要Thread对象可以被回收，那么ThreadLocalMap就能被回收。
 
@@ -445,7 +445,7 @@ Thread这个类内部有一个私有属性threadLocals，其类型是ThreadLocal
 ## guarded suspension模式
 多线程中的设计模式，Guarded Suspension：
 直译过来就是"保护性地暂停"，下图是该模式的结构图，一个GuardedObject，内部有一个成员变量---受保护的对象，以及两个成员方法---`get(Predicate<T> p)`和 `onChanged(T obj)`方法。
-![[Pasted image 20250609104929.png]]
+![[attachments/Pasted image 20250609104929.png]]
 GuardedObject的内部实现非常简单，是管程的一个经典用法：
 ```java
 class GuardedObject<T>{
@@ -497,12 +497,12 @@ Thread-Per-Message模式在Java领域并不是那么知名，根本原因在于J
 当然，对于一些并发度没那么高的异步场景，例如定时任务，采用Thread-Per-Message模式是完全没有问题的。实际工作中，我就见过完全基于Thread-Per-Message模式实现的分布式调度框架，这个框架为每个定时任务都分配了一个独立的线程。
 
 ## Worker Thread模式
-![[Pasted image 20250609183151.png]]
+![[attachments/Pasted image 20250609183151.png]]
 通过上面的图，你很容易就能想到用阻塞队列做任务池，然后创建固定数量的线程消费阻塞队列中的任务。其实你仔细想会发现，这个方案就是Java语言提供的线程池。
 **提交到相同线程池中的任务一定是相互独立的，否则就一定要慎重**。如果任务之间有依赖关系，最好将任务区分开来，用不同的线程池处理不同的任务，防止出现死锁问题。
 ## 生产者-消费者模式
 生产者-消费者模式的核心是一个**任务队列**，生产者线程生产任务，并将任务添加到任务队列中，而消费者线程从任务队列中获取任务并执行。下面是生产者-消费者模式的一个示意图：
-![[Pasted image 20250610140701.png]]
+![[attachments/Pasted image 20250610140701.png]]
 两阶段终止模式是一种通用的解决方案。但其实终止生产者-消费者服务还有一种更简单的方案，叫做 **“毒丸”对象**。简单来讲，“毒丸”对象是生产者生产的一条特殊任务，然后当消费者线程读到“毒丸”对象时，会立即终止自身的执行。
 
 ## Actor的规范化定义

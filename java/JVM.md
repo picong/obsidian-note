@@ -1,4 +1,4 @@
-自JDK7起，原本存放在永久代的字符串常量池被移至Java堆之中。
+﻿自JDK7起，原本存放在永久代的字符串常量池被移至Java堆之中。
 
 ## 记忆集与卡表
 记忆集是一种用于记录从非收集区域指向收集区域的指针集合的抽象数据结构。
@@ -8,7 +8,7 @@ HotSpot虚拟机的卡表是一个字节数组，以下代码是HotSpot默认的
 CARD_TABLE [this address >> 9] = 0;
 ```
 字节数组CARD_TABLE的每一个元素都对应着其表示的内存区域中一块特定大小的内存块，这个内存块被称作 "卡页" (Card Page)。一来说，卡页大小都是以2的N次幂的字节数，通过上面的代码可以看出来HotSpot中使用的卡也是2的9次幂，即512字节。那如果卡表表示内存区域的其实地址是0x0000的话，数据CARD_TABLE的第0、1、2号元素如下图所示：
-![[Pasted image 20250422170545.png]]
+![[attachments/Pasted image 20250422170545.png]]
 一个卡页的内存中通常包含不止一个对象，只要卡页内有一个(或更多)对象的字段存在着跨代指针，那就将对应卡表的数组元素的值标识为1，称为这个元素变脏(Dirty)，没有则表示为0。在垃圾收集发生时，只要筛选出卡表中变脏的元素，就能轻易得出哪些卡页内存块中包含跨代指针，把它们加入GC Roots中一并扫描。
 
 ## 并发标记
@@ -22,7 +22,7 @@ CARD_TABLE [this address >> 9] = 0;
 - 一种是把原本消亡的独享标记为存活，这种情况会产生一些逃过本次收集的浮动垃圾，下次收集清理掉就好。
 - 另一种是把原本存活的对象错误标记为已消亡，这种情况会导致程序发生错误。
 下表演示了存活对象被错误标记为已消亡问题的产生：
-![[Pasted image 20250423112503.png]]
+![[attachments/Pasted image 20250423112503.png]]
 Wilson于1994年在理论上证明了，当且仅当以下两个条件同时满足时，会产生“对象消失”的问题，即原本应该是黑色的对象被误标为白色：
 - 赋值器插入了一条或多条从黑色对象到白色对象的新引用；
 - 赋值器删除了全部从灰色对象到该白色对象的直接或间接引用。
@@ -37,16 +37,16 @@ Wilson于1994年在理论上证明了，当且仅当以下两个条件同时满�
 
 ## 经典收集器
 下图是各款经典收集器之间的关系：
-![[Pasted image 20250423113424.png]]
+![[attachments/Pasted image 20250423113424.png]]
 ## Serial收集器
 Serial/Serial Old 收集器的运行过程：
-![[Pasted image 20250423114326.png]]
+![[attachments/Pasted image 20250423114326.png]]
 它依然是HotSpot虚拟机运行在客户端模式下的默认新生代收集器，它简单而高效(与其他收集器的单线程相比)，对于内存资源受限的环境，它是所有收集器里额外内存消耗(Memory Footprint)最小的；对于单核处理或处理器核心数较少的环境来说，Serial收集器由于没有现成交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。
 ## ParNew收集器
 ParNew收集器实质上是Serial收集器的多线程并行版本，除了同时使用多条线程进行垃圾收集之外，其余的行为包括Serial收集器可以用的所有控制采纳数(例如：-XX：SurvivorRatio、-XX：PretenureSizeThreshold、-XX：HandlePromotionFailure等)、收集算法、Stop The World、对象分配规则、回收策略等都与Serial收集器完全一致。
 
 ParNew/Serial Old收集器的运行示意图如下：
-![[Pasted image 20250423115113.png]]
+![[attachments/Pasted image 20250423115113.png]]
 JDK 7之前的遗留系统中首选的新生代收集器，其中有一个与功能、性能无关但其实很重要的原因是：除了Serial收集器外，目前只有它能与CMS收集器配合工作。
 ParNew收集器是激活CMS后（使用-XX：+UseConcMarkSweepGC选项）的默认新生代收集器，也可以使用-XX：+/-UseParNewGC选项来强制指定或者禁用它。可以使用-XX：ParallelGCThreads参数来限制垃圾收集的线程数。
 
@@ -68,11 +68,11 @@ Parallel Scavenge收集器也是一款新生代收集器，它同样是基于标
 这是一个开关参数，当这个参数被激活之后，就不需要人工指定新生代的大小（-Xmn）​、Eden与Survivor区的比例（-XX：SurvivorRatio）​、晋升老年代对象大小（-XX：PretenureSizeThreshold）等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量。
 ## Serial Old收集器
 Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。这个收集器的主要意义也是供客户端模式下的HotSpot虚拟机使用。如果在服务端模式下，它也可能有两种用途：一种是在JDK 5以及之前的版本中与Parallel Scavenge收集器搭配使用 ，另外一种就是作为CMS收集器发生失败时的后备预案，在并发收集发生Concurrent Mode Failure时使用。下图是Serial/Serial Old收集器的运行示意图：
-![[Pasted image 20250423151519.png]]
+![[attachments/Pasted image 20250423151519.png]]
 ## Parallel Old收集器
 Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。这个收集器是直到JDK6时才开始提供的。
 在注重吞吐量或者处理器资源较为稀缺的场合，都可以优先考虑Parallel Scavenge+Parallel Old收集器这个组合，这个组合的工作过程如下图所示：
-![[Pasted image 20250423152234.png]]
+![[attachments/Pasted image 20250423152234.png]]
 ## CMS收集器
 CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。CMS收集器是基于标记-清除算法实现的，它的运作过程分为四个步骤：
 1. 初始标记(CMS initial mark) -- 标记一下GC Roots能直接关联到的对象，速度很快，但是需要STOP THE WORLD
@@ -80,7 +80,7 @@ CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时�
 3. 重新标记(CMS remark) -- 增量更新（上面讲过增量更新的过程），需要STOP THE WORLD
 4. 并发清除(CMS concurrent sweep) -- 清理掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。
 由于在整个过程中耗时最长的并发标记和并发清除阶段中，垃圾收集器线程都可以与用户线程一起工作，所以从总体上来说，CMS收集器的内存回收过程是与用户线程一起并发执行的。下图是CMS收集器的运作过程：
-![[Pasted image 20250423155518.png]]
+![[attachments/Pasted image 20250423155518.png]]
 ### **CMS 收集器的缺点​**​
 
 1. ​**​对 CPU 资源敏感​**​  
@@ -111,7 +111,7 @@ Region中还有一类特殊的Humongous区域，专门用来存储大对象。G1
 G1收集器之所以能建立可预测的停顿时间模型，是因为它将Region作为单次回收的最小单元，即每次收集到的内存空间都是Region大小的整数倍，这样可以有计划地避免在整个Java堆中进行全区域的垃圾收集。更具体的处理思路是让G1收集器去跟踪各个Region里面的垃圾堆积的“价值”大小，价值即回收所获得的空间大小以及回收所需时间的经验值，然后在后台维护一个优先级列表，每次根据用户设定允许的收集停顿时间（使用参数-XX：MaxGCPauseMillis指定，默认值是200毫秒）​，优先处理回收价值收益最大的那些Region。
 
 下图为G1收集器Region分区示意图：
-![[Pasted image 20250423175840.png]]
+![[attachments/Pasted image 20250423175840.png]]
 
 ### G1收集器至少有(不限于) 以下这些关键问的细节问题需要妥善解决：
 - 将Java堆分成多个独立Region后，Region里面存在的跨Region引用对象如何解决？ -- 使用记忆集避免堆作为GC Roots扫描，G1的每个Region都维护有自己的记忆集。
@@ -126,7 +126,7 @@ G1收集器之所以能建立可预测的停顿时间模型，是因为它将Reg
 从上述阶段的描述可以看出，G1收集器除了并发标记外，其余阶段也是要完全暂停用户线程的，换言之，它并非纯粹地追求低延迟，官方给它设定的目标是在延迟可控的情况下获得尽可能高的吞吐量，所以才能担当起“全功能收集器”的重任与期望 。
 
 下图是G1收集器的运作不走：
-![[Pasted image 20250423181143.png]]
+![[attachments/Pasted image 20250423181143.png]]
 置不同的期望停顿时间，可使得G1在不同应用场景中取得关注吞吐量和关注延迟之间的最佳平衡。不过，这里设置的“期望值”必须是符合实际的，不能异想天开，毕竟G1是要冻结用户线程来复制对象的，这个停顿时间再怎么低也得有个限度。
 
 ### **G1和CMS比较**
@@ -148,7 +148,7 @@ G1收集器之所以能建立可预测的停顿时间模型，是因为它将Reg
 
 # 低延迟垃圾收集器
 下图中浅色阶段表示必须挂起用户线程，深色表示收集器线程与用户线程是并发工作的：
-![[Pasted image 20250423185648.png]]
+![[attachments/Pasted image 20250423185648.png]]
 
 ## ZGC收集器
 ZGC收集器是一款基于Region内存布局的，jdk21版本之前不设分代的，使用了读屏障、染色指针和内存多重映射等技术来实现可并发的标记整理算法的，以低延迟为首要目标的一款垃圾收集器。
@@ -157,21 +157,21 @@ ZGC收集器是一款基于Region内存布局的，jdk21版本之前不设分代
 - 小型Region（Small Region）​：容量固定为2MB，用于放置小于256KB的小对象。
 - 中型Region（Medium Region）​：容量固定为32MB，用于放置大于等于256KB但小于4MB的对象。
 - 大型Region（Large Region）​：容量不固定，可以动态变化，但必须为2MB的整数倍，用于放置4MB或以上的大对象。每个大型Region中只会存放一个大对象，这也预示着虽然名字叫作“大型Region”​，但它的实际容量完全有可能小于中型Region，最小容量可低至4MB。大型Region在ZGC的实现中是不会被重分配（重分配是ZGC的一种处理动作，用于复制对象的收集器阶段，稍后会介绍到）的，因为复制一个大对象的代价非常高昂。
-![[Pasted image 20250424114615.png]]
+![[attachments/Pasted image 20250424114615.png]]
 
 ZGC收集器有一个标志性的设计是它采用的染色指针技术(Colored Pointer)，它直接把标记信息记在引用对象的指针上，这时，与其说可达性分析是遍历对象图来标记对象，还不如说是遍历"引用图"来标记"引用"了。
 以64位linux为例，64位的指针的高18位不能用来寻址，但剩余的46位指针所能支持的64TB内存在今天仍然能够充分满足大型服务器的需求。因此，ZGC的染色指针将剩余的46位的高4位提取出来存储四个标志信息，当然这也直接导致ZGC能够管理的内存不可以超过4TB。如下图所示：
-![[Pasted image 20250424182146.png]]
+![[attachments/Pasted image 20250424182146.png]]
 染色指针的三大优势：
 - 染色指针可以是的一旦某个Region的存活对象被移走之后，这个Region立即能够被释放和重用。
 - 染色指针可以大幅减少在垃圾收集过程中内存屏障的使用数量，设置写屏障的目的通常是为了记录对象引用的变动情况，如果将这些信息直接维护阿仔指针中，显然就可以省去一些专门的记录。
 - 染色指针可以作为一种可扩展的存储结构用来记录更多与对象标记、重定位过程相关的数据，以便日后进一步提升性能。
 
 Linux/x86-64平台上的ZGC使用了多重映射(Multi-Mapping)将多个不同的虚拟内存地址映射到同一个物理内存地址上，也就意味着ZGC虚拟内存中看到的地址空间要比实际的堆内存容量来得跟大。把染色指针中的标志位看做是地址的分段符，那只要将这些不同的地址段都映射到同一个物理内存空间，经过多重映射转换后，就可以使用染色指针正常进行寻址了，效果如下图所示：
-![[Pasted image 20250424183311.png]]
+![[attachments/Pasted image 20250424183311.png]]
 
 ### ZGC的运作过程如下所示：
-![[Pasted image 20250424183519.png]]
+![[attachments/Pasted image 20250424183519.png]]
 - **并发标记** （Concurrent Mark）​：与G1、Shenandoah一样，并发标记是遍历对象图做可达性分析的阶段，前后也要经过类似于G1、Shenandoah的初始标记、最终标记（尽管ZGC中的名字不叫这些）的短暂停顿，与G1、Shenandoah不同的是，ZGC的标记是在指针上而不是在对象上进行的，标记阶段会更新染色指针中的Marked 0、Marked 1标志位。
 - **并发预备重分配** （Concurrent Prepare for Relocate）​：这个阶段需要根据特定的查询条件统计得出本次收集过程要清理哪些Region，将这些Region组成重分配集（Relocation Set）​。GC每次回收都会扫描所有的Region，用范围更大的扫描成本换取省去G1中记忆集的维护成本。ZGC的重分配集只是决定了里面的存活对象会被重新复制到其他的Region中，里面的Region会被释放，而并不能说回收行为就只是针对这个集合里面的Region进行，因为标记过程是针对全堆的。此外，在JDK 12的ZGC中开始支持的类卸载以及弱引用的处理，也是在这个阶段中完成的。
 - **并发重分配** （Concurrent Relocate）​：重分配是ZGC执行过程中的核心阶段，这个过程要把重分配集中的存活对象复制到新的Region上，并为重分配集中的每个Region维护一个转发表（Forward Table）​，记录从旧对象到新对象的转向关系。
@@ -228,9 +228,9 @@ add，age，alloc，annotation，aot，arguments，attach，barrier，biasedlock
 5. 查看收集器Ergonomics机制（自动设置堆空间各分代区域大小、收集目标等内容，从Parallel收集器开始支持）自动调节的相关信息。在JDK 9之前使用-XX：+PrintAdaptive-SizePolicy，JDK 9之后使用-Xlog：gc+ergo*=trace：
 6. 查看熬过收集后剩余对象的年龄分布信息，在JDK 9前使用-XX：+PrintTenuring-Distribution，JDK 9之后使用-Xlog：gc+age=trace：
 ## 垃圾收集器参数总结
-![[Pasted image 20250425112049.png]]
+![[attachments/Pasted image 20250425112049.png]]
 (续)
-![[Pasted image 20250425112110.png]]
+![[attachments/Pasted image 20250425112110.png]]
 ## 内存分配
 ```ad-note
 -client设置为客户端模式在windows 64为系统中是不支持的，如果需要切换到Serial/Serial Old收集器组合需要使用参数：-XX: +UseSerialGC
@@ -302,7 +302,7 @@ jstat [ option vmid [interval[s|ms] [count]] ]
 jstat -gc 2764 250 20
 ```
 jstat工具的主要选项如下表所示：
-![[Pasted image 20250430103344.png]]
+![[attachments/Pasted image 20250430103344.png]]
 ## jinfo：Java配置信息工具
 jinfo（Configuration Info for Java）的作用是实时查看和调整虚拟机各项参数。
 jinfo还可以使用-sysprops选项把虚拟机进程的System.getProperties()的内容打印出来。JDK 6之后，jinfo在Windows和Linux平台都有提供，并且加入了在运行期修改部分参数值的能力（可以使用-flag[+|-]name或者-flag name=value在运行期修改一部分运行期可写的虚拟机参数值）​。在JDK 6中，jinfo对于Windows平台功能仍然有较大限制，只提供了最基本的-flag选项。
@@ -324,7 +324,7 @@ jmap命令格式：
 jmap [ option ] vmid
 ```
 option选项的合法值与具体含义如下表：
-![[Pasted image 20250430110318.png]]
+![[attachments/Pasted image 20250430110318.png]]
 
 使用jmap生成dump文件的例子：
 ```shell
@@ -342,22 +342,22 @@ jstack命令格式：
 jstack [ option ] vmid
 ```
 option选项的合法值与具体含义如表所示：
-![[Pasted image 20250430113206.png]]
+![[attachments/Pasted image 20250430113206.png]]
 从JDK 5起，java.lang.Thread类新增了一个getAllStackTraces()方法用于获取虚拟机中所有线程的StackTraceElement对象。使用这个方法可以通过简单的几行代码完成jstack的大部分功能。
 ## 基础工具总结
 - 基础工具：用于支持基本的程序创建和运行：
-![[Pasted image 20250430113756.png]]
+![[attachments/Pasted image 20250430113756.png]]
 - 安全：用于程序签名、设置安全测试等：
-![[Pasted image 20250430113912.png]]
+![[attachments/Pasted image 20250430113912.png]]
 - ...
 - 性能监控和故障处理：用于监控分析Java虚拟机运行信息，排查问题
-![[Pasted image 20250430114207.png]]
+![[attachments/Pasted image 20250430114207.png]]
 - ...
 - REPL和脚本工具
-![[Pasted image 20250430114241.png]]
+![[attachments/Pasted image 20250430114241.png]]
 ## JHSDB：基于服务性代理的调试工具
 下表是JCMD、JHSDB与原基础工具实现相同功能的简要对比。
-![[Pasted image 20250430143020.png]]
+![[attachments/Pasted image 20250430143020.png]]
 
 JHSDB是一款服务性代理(Serviceability Agent，SA) 实现的进程外调试工具。服务型代理是HotSpot虚拟机中一组用于映射Java虚拟机运行信息的、主要基于Java语言(含少量JNI代码)实现的API集合。服务型代理以HotSpot内部的数据结构为参照物进行设计，把这些C++的数据抽象成Java模型对象，相当于HotSpot的C++代码的一个镜像。通过服务性代理的API，可以在一个独立的Java虚拟机的进程里分析其他HotSpot虚拟机的内部数据，或者从HotSpot虚拟机进程内存中dump出来的转储快照里还原出它的运行状态细节。服务性代理的工作原理跟Linux上的GDB或者Windows上的Windbg是相似的。
 
@@ -397,7 +397,7 @@ public class JHSDB_TestCase {
 jhsdb hsdb --pid 12233
 ```
 首先点击菜单中的Tools->Heap Parameters ，结果如图所示:
-![[Pasted image 20250430163338.png]]
+![[attachments/Pasted image 20250430163338.png]]
 打开Windows->Console窗口，使用scanoops命令在Java堆的新生代（从Eden起始地址到To Survivor结束地址）范围内查找ObjectHolder的实例，注意这里类要全路径，结果如下所示：
 ```shell
 hsdb>scanoops 0x00007f32c7800000 0x00007f32c7b50000 com.hmilyylimh.cloud.facade.demo.JHSDB_TestCase$ObjectHolder
@@ -406,7 +406,7 @@ hsdb>scanoops 0x00007f32c7800000 0x00007f32c7b50000 com.hmilyylimh.cloud.facade.
 0x00007f32c7a7c490 JHSDB_TestCase$ObjectHolder
 ```
 再使用Tools->Inspector功能确认一下这三个地址中存放的对象，结果如图所示：
-![[Pasted image 20250430163544.png]]
+![[attachments/Pasted image 20250430163544.png]]
 Inspector为我们展示了对象头和指向对象元数据的指针，里面包括了Java类型的名字、继承关系、实现接口关系，字段信息、方法信息、运行时常量池的指针、内嵌的虚方法表（vtable）以及接口方法表（itable）等。
 
 接下来要根据堆中对象实例地址找出引用它们的指针，在命令行中使用如下命令：
@@ -414,33 +414,33 @@ Inspector为我们展示了对象头和指向对象元数据的指针，里面�
 hsdb> revptrs 0x00007f32c7a7c458 Computing reverse pointers... Done. Oop for java/lang/Class @ 0x00007f32c7a7b180
 ```
 通过Inspector查看该对象实例，可以清楚看到这确实是一个java.lang.Class类型的对象实例，里面有一个名为staticObj的实例字段:
-![[Pasted image 20250430163723.png]]
+![[attachments/Pasted image 20250430163723.png]]
 JDK 7及其以后版本的HotSpot虚拟机选择把静态变量与类型在Java语言一端的映射Class对象存放在一起，存储于Java堆之中，从我们的实验中也明确验证了这一点 。
 接下来继续查找第二个对象实例：
 ```shell
 hsdb>revptrs 0x00007f32c7a7c480 Computing reverse pointers... Done. Oop for JHSDB_TestCase$Test @ 0x00007f32c7a7c468
 ```
-![[Pasted image 20250430163835.png]]
+![[attachments/Pasted image 20250430163835.png]]
 这个结果完全符合我们的预期，第二个ObjectHolder的指针是在Java堆中JHSDB_TestCase$Test对象的instanceObj字段上。
 
 但是我们采用相同方法查找第三个ObjectHolder实例时，JHSDB返回了一个null。
 看来revptrs命令并不支持查找栈上的指针引用，不过没有关系，得益于我们测试代码足够简洁，人工也可以来完成这件事情。在Java Thread窗口选中main线程后点击Stack Memory按钮查看该线程的栈内存，如图所示。
-![[Pasted image 20250430163924.png]]
+![[attachments/Pasted image 20250430163924.png]]
 这个线程只有两个方法栈帧，尽管没有查找功能，但通过肉眼观察在地址0x00007f32e771c998上的值正好就是0x00007f32c7a7c490，而且JHSDB在旁边已经自动生成注释，说明这里确实是引用了一个来自新生代的JHSDB_TestCase$ObjectHolder对象。
 JHSDB提供了非常强大且灵活的命令和功能，本节的例子只是其中一个很小的应用，读者在实际开发、学习时，可以用它来调试虚拟机进程或者dump出来的内存转储快照，以积累更多的实际经验。
 ## Jconsole：Java监视与管理控制台
 JConsole (Java Monitoring and Management Console) 是一款基于JMX（Java Management Extensions）的可视化监视、管理工具。它的主要功能是通过JMX的MBean(Managed Bean) 对系统进行信息收集和参数动态调整。JMX是一种开放性的技术，不仅可以用在虚拟机本身的管理上，还可以运行于虚拟机之上的软件中，典型的如中间件大多也基于JMX来实现管理与监控。虚拟机对JMX MBean的访问也是完全开放的，可以使用代码调用API、支持JMX协议的管理控制台，或者其他符合JMX规范的软件进行访问。
 
 启动JConsole连接本地对应的JVM进程后，可以在内存页签中观察内存使用情况：
-![[Pasted image 20250430174135.png]]
+![[attachments/Pasted image 20250430174135.png]]
 
 可以在线程页签中选择对应的线程观察当前线程处于什么状态：
-![[Pasted image 20250430174241.png]]
-![[Pasted image 20250430174248.png]]
-![[Pasted image 20250430174317.png]]
+![[attachments/Pasted image 20250430174241.png]]
+![[attachments/Pasted image 20250430174248.png]]
+![[attachments/Pasted image 20250430174317.png]]
 
 通过点击死锁检测按钮，可以看到当前进程中死锁的线程情况：
-![[Pasted image 20250430174346.png]]
+![[attachments/Pasted image 20250430174346.png]]
 ## VisualVM：多合-故障处理工具
 VisualVM (All-in-one Java Troubleshooting Tool) 是功能最强大的运行监视和故障处理程序之一。它除了常规的运行监视、故障处理外，还提供其他方面的能力，譬如性能分析（Profiling）。相比第三方工具，VisualVM还有一个很大的优点：不需要被监视的程序基于特殊Agent去运行，因此它的通用性很强，对应用程序实际性能的影响也较小。
 ### 有了插件扩展支持的VisualVM可以做到：
@@ -450,14 +450,14 @@ VisualVM (All-in-one Java Troubleshooting Tool) 是功能最强大的运行监�
 - 方法级的程序运行性能分析，找出被调用最多、运行时间最长的方法。
 - 离线程序快照：收集程序的运行时配置、线程dump、内存dump等信息建立一个快照，可以将快照发送开发者处进行Bug反馈。
 - 离线程序快照：收集程序的运行时配置、线程dump、内存dump等信息建立一个快照，可以将快照发送开发者处进行Bug反馈。
-![[Pasted image 20250430182758.png]]
+![[attachments/Pasted image 20250430182758.png]]
 ### 生成、浏览堆转储快照
 - 在“应用程序”窗口中右键单击应用程序节点，然后选择“堆Dump”​。
 - 在“应用程序”窗口中双击应用程序节点以打开应用程序标签，然后在“监视”标签中单击“堆Dump”​。
-![[Pasted image 20250430183729.png]]
+![[attachments/Pasted image 20250430183729.png]]
 ### 分析程序性能
 在Profiler页签中，VisualVM提供了程序运行期间方法级的处理器执行时间分析以及内存分析。做Profiling分析肯定会对程序运行性能有比较大的影响，所以一般不在生产环境使用这项功能，或者改用JMC来完成，JMC的Profiling能力更强，对应用的影响非常轻微。
-![[Pasted image 20250430183802.png]]
+![[attachments/Pasted image 20250430183802.png]]
 ```ad-note
 注意 　在JDK 5之后，在客户端模式下的虚拟机加入并且自动开启了类共享—这是一个在多虚拟机进程共享rt.jar中类数据以提高加载速度和节省内存的优化，而根据相关Bug报告的反映，VisualVM的Profiler功能会因为类共享而导致被监视的应用程序崩溃，所以读者进行Profiling前，最好在被监视程序中使用-Xshare：off参数来关闭类共享优化。
 ```
@@ -514,15 +514,15 @@ public static void func(@Self org.fenixsoft.monitoring.BTraceTest instance,int a
 
 执行步骤如下：
 点击Start按钮后稍等片刻，编译完成后，Output面板中会出现“BTrace code successfuly deployed”的字样。当程序运行时将会在Output面板输出如图4-23所示的调试信息。
-![[Pasted image 20250430184205.png]]
+![[attachments/Pasted image 20250430184205.png]]
 BTrace能够实现动态修改程序行为，是因为它是基于Java虚拟机的Instrument开发的。Instrument是Java虚拟机工具接口（Java Virtual Machine Tool Interface，JVMTI）的重要组件，提供了一套代理（Agent）机制，使得第三方工具程序可以以代理的方式访问和修改Java虚拟机内部的数据。阿里巴巴开源的诊断工具Arthas也通过Instrument实现了与BTrace类似的功能。
 
 ## class文件格式
-![[Pasted image 20250507182747.png]]
+![[attachments/Pasted image 20250507182747.png]]
 
 ## 类加载的时机
 下图是类的生命周期：
-![[Pasted image 20250521173408.png]]
+![[attachments/Pasted image 20250521173408.png]]
 《Java虚拟机规范》中并没有强制约束，类加载过程中的第一个阶段"加载"是在什么时候发生。而是严格规定了有且只有六种情况必须立即对类进行"初始化"(而加载、验证、准备自然需要在此之前开始):
 1. 遇到new、getstatic、putstatic或invokestatic这四条字节码指令时，如果类型没有进行过初始化，则需要先触发其初始化阶段
 2. 使用java.lang.reflect包的方法对类型进行反射调用的时候，如果类型没有进行过初始化，则需要先触发其初始化
@@ -545,9 +545,9 @@ BTrace能够实现动态修改程序行为，是因为它是基于Java虚拟机�
 Javac确实是做了许多针对Java语言编码过程的优化措施来降低程序员的编码复杂度、提高编码效率。相当多新生的Java语法特性，都是靠编译器的“语法糖”来实现，而不是依赖字节码或者Java虚拟机的底层改进来支持。我们可以这样认为，Java中即时编译器在运行期的优化过程，支撑了程序执行效率的不断提升；而前端编译器在编译期的优化过程，则是支撑着程序员的编码效率和语言使用者的幸福感的提高
 
 ### Javac的编译过程
-![[Pasted image 20250522140917.png]]
+![[attachments/Pasted image 20250522140917.png]]
 Javac编译动作的入口是com.sun.tools.javac.main.JavaCompiler类，整个编译过程如下图所示：
-![[Pasted image 20250522141006.png]]
+![[attachments/Pasted image 20250522141006.png]]
 
 ### 包装类的 `等于等于`运算不在遇到算术运算的情况下不会自动拆箱，以及它们的equals()方法不处理数据转型的关系。
 
@@ -566,19 +566,19 @@ HotSpot虚拟机中使用的是第二种基于计数器的热点探测方法，�
 - -XX: CompileThreshold 方法调用计数器阈值，客户端模式下默认是1500次，服务端模式下默认是10000次
 - -XX：-UseCounterDecay来关闭热度衰减，让方法计数器统计方法调用的绝对次数，这样只要系统运行时间足够长
 - -XX：CounterHalfLifeTime参数设置半衰周期的时间，单位是秒
-![[Pasted image 20250523095858.png]]
+![[attachments/Pasted image 20250523095858.png]]
 
 回边计数器，它的作用是统计一个方法中循环体代码执行的次数 [3] ，在字节码中遇到控制流向后跳转的指令就称为“回边（Back Edge）​”​，很显然建立回边计数器统计的目的是为了触发栈上的替换编译。
 
 -XX：OnStackReplacePercentage来间接调整回边计数器的阈值，其计算公式有如下两种：
 - 客户端模式下，方法调用计数器阈值（-XX：CompileThreshold）乘以OSR比率（-XX：OnStackReplacePercentage）除以100。其中-XX：OnStackReplacePercentage默认值为933，如果都取默认值，那客户端模式虚拟机的回边计数器的阈值为13995。
 - 服务端模式下：方法调用计数器阈值（-XX：CompileThreshold）乘以（OSR比率（-XX：OnStackReplacePercentage）减去解释器监控比率（-XX：InterpreterProfilePercentage）的差值）除以100。其中-XX：OnStack ReplacePercentage默认值为140，-XX：InterpreterProfilePercentage默认值为33，如果都取默认值，那服务端模式虚拟机回边计数器的阈值为10700
-![[Pasted image 20250523100119.png]]
+![[attachments/Pasted image 20250523100119.png]]
 与方法计数器不同，回边计数器没有计数热度衰减的过程，因此这个计数器统计的就是该方法循环执行的绝对次数。当计数器溢出的时候，它还会把方法计数器的值也调整到溢出状态，这样下次再进入该方法的时候就会执行标准编译过程。
 ## 编译过程
 在默认条件下，无论是方法调用产生的标准编译请求，还是栈上替换编译请求，虚拟机在编译器还未完成编译之前，都仍然将按照解释方式继续执行代码，而编译动作则在后台的编译线程中进行。
 ### 客户端编译器大致的执行过程如下图：
-![[Pasted image 20250523101817.png]]
+![[attachments/Pasted image 20250523101817.png]]
 ### 服务端模式下的即时编译过程
 而服务端编译器则是专门面向服务端的典型应用场景，并为服务端的性能配置针对性调整过的编译器，也是一个能容忍很高优化复杂度的高级编译器，几乎能达到GNU C++编译器使用-O2参数时的优化强度。它会执行大部分经典的优化动，例如：无用代码消除（Dead Code Elimination）​、循环展开（Loop Unrolling）​、循环表达式外提（Loop Expression Hoisting）​、消除公共子表达式（Common Subexpression Elimination）​、常量传播（Constant Propagation）.....
 
@@ -663,7 +663,7 @@ JDK 9时发布的JEP 243：Java虚拟机编译器接口（Java-Level JVM Compile
 - **加锁过程**：
     
     1. **创建锁记录（Lock Record）**：线程在栈帧中分配一个锁记录空间，存储对象头的Mark Word副本。
-        ![[Pasted image 20250526184413.png]]
+        ![[attachments/Pasted image 20250526184413.png]]
     2. **CAS替换**：尝试通过CAS操作将对象头的Mark Word替换为指向锁记录的指针。
         
     3. **成功**：若CAS成功，对象头标志位变为轻量级锁（`00`）。
@@ -689,5 +689,5 @@ JDK 9时发布的JEP 243：Java虚拟机编译器接口（Java-Level JVM Compile
     轻量级锁和重量级锁**不会降级**，但偏向锁在撤销后可能重新偏向其他线程。
 
 下图是HotSpot虚拟机对象头Mark Word：
-![[Pasted image 20250526184218.png]]
+![[attachments/Pasted image 20250526184218.png]]
 

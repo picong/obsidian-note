@@ -1,5 +1,5 @@
 {
-  "vimMode": true,
+  "vimMode": false,
   "defaultViewMode": "source",
   "livePreview": true,
   "alwaysUpdateLinks": true,
@@ -9,5 +9,8 @@
     "landscape": false,
     "margin": "0",
     "downscalePercent": 100
-  }
+  },
+  "promptDelete": false,
+  "attachmentFolderPath": "./attachments",
+  "newFileLocation": "current"
 }

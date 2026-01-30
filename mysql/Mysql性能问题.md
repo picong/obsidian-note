@@ -5,7 +5,7 @@
 ## 刷脏页导致数据库系统压力增大，导致外部感知像数据库抖了一下的原因。
 四种引发数据库flush (刷脏页)的场景。
 1. InnoDB的redo log 写满了。这时候系统会停止所有更新操作，把checkpoint往前推进，redo log留出空间继续写。如下图所示:
-![[Pasted image 20240121170536.png]]
+![[attachments/Pasted image 20240121170536.png]]
 2. 当需要新的内存页，而内存不够用的时候，就要淘汰一些数据页，空出内存给别的数据页使用。如果淘汰的是 "脏页", 就要先将脏页写到磁盘。
 如果刷脏页一定会写盘，就保证了每个数据页有两种状态：
 	- 一种是内存里存在，内存里就肯定是正确的结果，直接返回；
@@ -37,7 +37,7 @@ F1(M)
 
 InnoDB每次写入的日志都有一个序号，当前写入的序号跟checkpoint对应的序号之间的差值，我们假设为N。InnoDB会根据这个N算出一个范围在 0到100之间的数字，这个计算公式可以记为 F2(N)。
 **根据上述算得的F1(M)和F2(N)两个值，取其中较大的值记为R，之后引擎就可以按照innodb_io_capacity定义的能力乘以 R%来控制刷脏页的速度。**
-![[Pasted image 20240121174519.png]]
+![[attachments/Pasted image 20240121174519.png]]
 InnoDB会在后台刷脏页，而刷脏页的过程是要将内存页写入磁盘。所以，无论是你的查询语句在需要内存的时候可能要求淘汰一个脏页，还是由于刷脏页的逻辑会占用IO资源并可能影响到你的更新语句，都可能造成你从业务端感知到Mysql "抖"了一下的原因。
 要尽量避免这种情况，你就要合理地设置innodb_io_capacity的值，并且平时要多关注脏页比例，不要让它经常接近 75%。
 其中，脏页比例是通过 Innodb_buffer_pool_pages_dirty/Innodb_buffer_pool_pages_total得到的，具体的命令参考下面的代码：
@@ -64,7 +64,7 @@ InnoDB不跟MyISAM一样的原因是，InnDB需要实现MVCC，所以同一时�
 
 ## 全字段排序
 全字段排序过程如下如所示：
-![[Pasted image 20240124140615.png]]
+![[attachments/Pasted image 20240124140615.png]]
 图中 "按name排序" 这个动作，可能在内存中完成，也可能需要使用外部排序，这取决于排序所需的内存和参数sort_buffer_size。
 sort_buffer_size,就是Mysql为排序开辟的内存 (sort_buffer) 的大小。如果排序的数据量小于 sort_buffer_size，排序就在内存中完成。但如果排序数据量太大，内存放不下，则不得不利用磁盘临时文件辅助排序。
 
@@ -89,7 +89,7 @@ select VARIABLE_VALUE into @b from performance_schema.session_status where varia
 select @b-@a;
 ```
 这个方法是通过查看 OPTMIZER_TRACE 的结果来确认的，你可以从 number_of_tmp_files中看到是否使用了临时文件。
-![[Pasted image 20240124141055.png]]
+![[attachments/Pasted image 20240124141055.png]]
 numbers_of_tmp_files 表示的是，排序过程中使用的临时文件数。你一定奇怪，为什么需要12个文件？内存放不下时，就需要使用外部排序，外部排序一般使用归并排序算法。可以这么简单理解，**Mysql 将需要排序的数据分成12份，每一份单独排序后存放在这些临时文件中。然后把这12个有序文件再合并成一个有序的大文件。**
 
 ## rowid 排序
@@ -99,7 +99,7 @@ SET max_length_for_sort_data = 16;
 ```
 max_length_for_sort_data，是Mysql中专门控制用于排序的行数据的长度的一个参数。它的意思是，如果单行数据的长度超过这个值，Mysql就认为单行太大，要换一个算法。
 我们把这种排序称为rowid排序：
-![[Pasted image 20240124142053.png]]
+![[attachments/Pasted image 20240124142053.png]]
 
 ## 全字段排序 VS rowid 排序
 从上述两种排序可以得出一个结论：】
@@ -107,12 +107,12 @@ max_length_for_sort_data，是Mysql中专门控制用于排序的行数据的长
 如果Mysql认为内存足够大，会优先选择全字段排序，把需要的字段都放到sort_buffer中，这样排序后就会直接从内存里面返回查询结果了，不用再回到原表去取数据。
 
 从上面分析的执行过程，我们可以看到，Mysql之所以需要生成临时表，并且在临时表上做排序操作，其原因是原来的数据都是无序的。
-![[Pasted image 20240124142828.png]]
+![[attachments/Pasted image 20240124142828.png]]
 可以看到，这个查询过程不需要临时表，也不需要排序。接下来，我们用explain的结果来印证一下。
-![[Pasted image 20240124142911.png]]
+![[attachments/Pasted image 20240124142911.png]]
 如果使用覆盖索引：
-![[Pasted image 20240124143252.png]]
-![[Pasted image 20240124143257.png]]
+![[attachments/Pasted image 20240124143252.png]]
+![[attachments/Pasted image 20240124143257.png]]
 可以看到，Extra字段里面多了 "Using index",表示就是使用了覆盖索引，性能会快很多。
 当然，这里并不是说为了每个查询能用上覆盖索引，就要把语句中涉及的字段都建立上联合索引，毕竟索引还是有维护代价的。这是一个需要权衡的决定。
 
@@ -128,7 +128,7 @@ Mysql5.6 版本引入了一个新的排序算法，即：优先队列排序算�
 1. 对于这10000个准备排序的 (R,rowid)，先取前三行，构造成一个堆；
 2. 取下一个行 (R',rowid')，跟当前堆里面最大的R比较，如果 R'小于R，把这个(R,rowid)从堆中去掉，换成 (R', rowid');
 3. 重复第2步，知道第10000个 (R',rowid')完成比较。
-![[Pasted image 20240124155139.png]]
+![[attachments/Pasted image 20240124155139.png]]
 采用大顶堆来取前三个最小的值。
 
 
@@ -163,11 +163,11 @@ select count(*) from tradelog where month(t_modified)=7;
 
 ## 等MDL锁
 如下图所示，就是使用 show processlist 命令查看 Waiting for table metadata lock的示意图。
-![[Pasted image 20240125142439.png]]
+![[attachments/Pasted image 20240125142439.png]]
 出现这个状态表示的是，现在有一个线程正在表t上请求或者持有MDL写锁，把select 语句堵住了。
 由于Mysql5.7版本修改了MDL的加锁策略，所以就不能复现这个场景了。
 不过在Mysql 5.7版本下复现这个场景，也很容易。如下图所示，我给出了简单的复现步骤。
-![[Pasted image 20240125151221.png]]
+![[attachments/Pasted image 20240125151221.png]]
 session A通过lock tables(注意这里命令是lock tables，图片上少了s) 命令持有表t的MDL写锁，而session B 的查询需要获取 MDL 读锁。所以，session B 进入等待状态。
 处理这类问题的处理方式，就是找到谁持有MDL写锁，然后把它kill 掉。
 但是，由于在show processlist的结果里面，session A的Command列是 "Sleep",导致查找起来很不方便。不过有了performance_schema 和 sys系统库以后，就方便多了。(Mysql启动时需要设置performance_schema=on,相比于设置为 off 会有 10%左右的性能损失)
@@ -177,7 +177,7 @@ select blocking_pid from sys.schema_table_lock_waits;
 把这个连接用kill命令断开即可。
 
 ## 等 flush
-![[Pasted image 20240125152413.png]]
+![[attachments/Pasted image 20240125152413.png]]
 Mysql里面对表做flush操作的用法，一般有以下两个：
 ```sql
 flush tables t with read lock;
@@ -185,29 +185,29 @@ flush tables with read lock;
 ```
 这两个flush语句，如果指定表t的话，代表的是只关闭表 t；如果没有指定具体的表明，则表示关闭Mysql里所有打开的表。但是正常这两个语句执行起来都很快，除非它们也被别的线程堵住了。
 以下是 Waiting for table flush 的复现步骤：
-![[Pasted image 20240125152732.png]]
+![[attachments/Pasted image 20240125152732.png]]
 在 session A中，我故意每行都调用一次 sleep(1), 这样这个语句默认要执行10万秒，在这期间表t 一直是被 session A "打开"着。然后，session B的flush tables t命令再要去关闭表t，就需要等session A的查询结束。这样，session C要再次查询的话，就会被flush命令堵住了。
-![[Pasted image 20240125165307.png]]
+![[attachments/Pasted image 20240125165307.png]]
 这种情况，通过kill query 4, 将sleep的查询kill掉就行。
 
 ## 等行锁
-![[Pasted image 20240125173637.png]]
+![[attachments/Pasted image 20240125173637.png]]
 可以通过以下sql查询是谁占着写锁。
 ```sql
 mysql> select * from t sys.innodb_lock_waits where locked_table='`test`.`t`'\G
 ```
-![[Pasted image 20240125173729.png]]
+![[attachments/Pasted image 20240125173729.png]]
 可以看到，这个信息很全，4号线程是造成阻塞的罪魁祸首。而干掉这个罪魁祸首的方式，就是KILL QUERY 4 或 4.
 不过，这里不应该显示 "KILL QUERY 4"。这个命令表示停止4号线程当前正在执行的语句，而这个方法其实是没有用的。因为占有行锁的是update语句，这个语句已经是之前执行完成了的，现在执行KILL QUERY，无法让这个事务去掉 id = 1上的行锁。
 
 实际上，KILL 4才有效，也就是说直接断开这个连接。这里隐含的一个逻辑就是，连接被断开的时候，会自动回滚这个连接里面正在执行的线程，也就释放了id=1上的行锁。
 
 ## 第二类：查询慢
-![[Pasted image 20240125175515.png]]
-![[Pasted image 20240125175448.png]]
+![[attachments/Pasted image 20240125175515.png]]
+![[attachments/Pasted image 20240125175448.png]]
 session A 先用 start transaction with  consistent snapshot 命令启动了一个事务，之后session B才开始执行update语句。
 session B 执行完100万次update语句后，id = 1 这一行处于什么状态呢？你可以从下图中找到答案。
-![[Pasted image 20240125175819.png]]
+![[attachments/Pasted image 20240125175819.png]]
 session B 更新完 100万次，生成了100万个回滚日志 (undo log)。
 
 带lock in share mode的SQL语句，是当前读，因此会直接读到 1000001这个结果，所以速度很快；而`select * from t where id = 1` 这个语句，是快照读，因此需要从 1000001开始，一次执行uodo log，执行100万次以后，才将1这个结果返回。

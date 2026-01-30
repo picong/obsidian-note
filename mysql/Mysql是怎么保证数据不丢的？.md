@@ -4,7 +4,7 @@
 系统给binlog分配了一片内存，每个线程一个，参数binlog_cache_size用于控制单个线程内binlog cache所占用的大小。如果超过了这个参数规定的大小，就要暂时存到磁盘。
 
 事务提交的时候，执行器吧binlog cache里的完整事务写入到binlog中，并清空binlog cache。状态如图1所示。
-![[Pasted image 20231225160236.png]]
+![[attachments/Pasted image 20231225160236.png]]
 可以看到，每个线程有自己的binlog cache，但是共用同一份binlog文件。
 - 图中write，指的是把日志写入到文件系统的page cache，并没有把数据持久化到磁盘，所以速度比较快。
 - 图中的fsync，才是将数据持久化到磁盘的操作。一般情况下，我们任务fsync才占此磁盘的IOPS。
@@ -16,7 +16,7 @@ write和fsync的时机，是由参数sync_binlog控制的：
 ## redo log的写入机制
 事务的执行过程中，生成的redo log是先写到redo log buffer的。
 Mysql的redo log的存储状态如下图所示：
-![[Pasted image 20231225160855.png]]
+![[attachments/Pasted image 20231225160855.png]]
 这三种状态分别是：
 1. 存在redo log buffer中，物理上是在Mysql进程内存中，就是图中的红色部分；
 2. 写到磁盘(write)，但是没有持久化(fsync)，屋里上是在文件系统的page cache里面的，也就是图中的黄色部分。
@@ -43,13 +43,13 @@ InnoDB有一个后台线程，每隔1秒，就会把redo log buffer中的日志�
 通常我们说Mysql的 "双 1"配置，指的是sync_binlog和innodb_flush_at_trx_commit都设置成1.也就是说，一个事务完整提交前，需要等待两次刷盘，一次是redo log (prepare 阶段), 一次是binlog。
 
 这里，我需要先和你介绍日志逻辑序列号(log sequence number, LSN)的概念。LSN是单调递增的，用来对应redo log的一个个写入点。每次写入长度为length 的 redo log，LSN的值就会加上length。
-![[Pasted image 20231225180131.png]]
+![[attachments/Pasted image 20231225180131.png]]
 
 
 实际上，写binlog是分成两步的：
 1. 先把binlog 从binlog cache中写到磁盘上的binlog文件；
 2. 调用fsync 持久化。
-![[Pasted image 20231225180553.png]]
+![[attachments/Pasted image 20231225180553.png]]
 但是通常情况下第3步执行得会很快，所以binlog的write和fsync间的间隔时间短，导致能集合到一起持久化的binlog比较少，因此binlog 的组提交的效果通常不如redo log的效果那么好。
 如果想提升binlog组提交的效果，可以通过设置binlog_group_commit_sync_delay和binlog_group_commit_sync_no_delay_count来实现。
 

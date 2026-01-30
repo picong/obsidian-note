@@ -1,6 +1,6 @@
 {
   "accentColor": "#5f8295",
-  "cssTheme": "Minimal",
+  "cssTheme": "Catppuccin",
   "theme": "moonstone",
   "showViewHeader": true,
   "nativeMenus": false,
@@ -8,7 +8,7 @@
   "baseFontSize": 15,
   "baseFontSizeAction": true,
   "interfaceFontFamily": "",
-  "textFontFamily": "",
+  "textFontFamily": "Maple Mono NF CN",
   "monospaceFontFamily": "",
   "showRibbon": true
 }
