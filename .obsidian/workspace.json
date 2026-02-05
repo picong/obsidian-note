@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CLAUDE.md",
+                "file": "00_Inbox/2026-02-05 闪念笔记.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CLAUDE"
+              "title": "2026-02-05 闪念笔记"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "Pasted image 20240929113636.png",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 297
+    "width": 329,
+    "collapsed": true
   },
   "right": {
     "id": "3f3db18367300875",
@@ -140,33 +141,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "学习笔记/分布式架构.md",
+                "file": "00_Inbox/2026-02-03 闪念笔记.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "分布式架构 的大纲"
-            }
-          },
-          {
-            "id": "a4cfbfa8dbecdc50",
-            "type": "leaf",
-            "state": {
-              "type": "calendar",
-              "state": {},
-              "icon": "calendar-with-checkmark",
-              "title": "Calendar"
-            }
-          },
-          {
-            "id": "fbb07befa70d830c",
-            "type": "leaf",
-            "state": {
-              "type": "advanced-tables-toolbar",
-              "state": {},
-              "icon": "spreadsheet",
-              "title": "Advanced Tables"
+              "title": "2026-02-03 闪念笔记 的大纲"
             }
           },
           {
@@ -180,7 +161,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-archive",
-              "title": "All properties"
+              "title": "添加笔记属性"
             }
           },
           {
@@ -192,9 +173,19 @@
               "icon": "bot",
               "title": "Claudian"
             }
+          },
+          {
+            "id": "605655239e96776c",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
           }
         ],
-        "currentTab": 7
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -212,8 +203,6 @@
       "command-palette:打开命令面板": false,
       "obsidian-translator:Translate": false,
       "obsidian-excalidraw-plugin:新建 Excalidraw 绘图": false,
-      "table-editor-obsidian:Advanced Tables Toolbar": false,
-      "remotely-save:Remotely Save": false,
       "markdown-importer:打开 Markdown 格式转换器": false,
       "obsidian42-brat:BRAT": false,
       "claudian:Open Claudian": false,
@@ -224,52 +213,52 @@
   },
   "active": "8817ab3de465f90c",
   "lastOpenFiles": [
-    "学习笔记/分布式架构-01-RPC需要解决的三个基本问题.md",
-    "消息队列/消息队列基础.md",
-    "Reading Book/读书笔记.md",
-    "Reading Book/DDIA读书笔记.md",
-    "Reading Book/英语生词本.md",
-    "Reading Book/2023-08-01.md",
-    "mysql/Mysql怎么保证高可用.md",
-    "mysql/Mysql性能问题.md",
-    "mysql/Mysql是怎么保证数据不丢的？.md",
-    "mysql/Mysql如何保证准备一致.md",
-    "mysql/自增主键为什么不是连续的？.md",
-    "mysql/为什么还有kill不掉的语句？.md",
-    "mysql/索引以及锁相关.md",
-    "mysql/基础篇.md",
-    "学习笔记/git/git branch work-tree.md",
-    "学习笔记/git/git branch - rebase.md",
-    "IMAGE_ORGANIZATION_SUMMARY.md",
-    "mysql日志相关.md",
-    "IMAGE_ORGANIZATION_REPORT.md",
-    "IMAGE_ORGANIZATION_COMPLETE.md",
-    "Work note/账户文档.md",
-    "未命名 4.base",
-    "Work note/Drawing 2023-08-28 13.36.47.excalidraw.md",
-    "Work note/Drawing 2023-08-27 16.50.37.excalidraw.md",
-    "Work note/收单业务学习视频.md",
-    "Work note/各类交易改为7分钟支付支付时间限制（只做钱包相关).md",
-    "work/钱包-中台对账流程.md",
-    "IMAGE_ORGANIZATION_COMPLETE.md.tmp.52688.1769763878837",
-    "Nosql/attachments/Pasted image 20241010102624.png",
+    "01_Literature/Books/深入剖析Kubernetes/25-FlexVolume与CSI.md",
+    "01_Literature/Books/深入剖析Kubernetes/26-CSI插件编写指南.md",
+    "00_Inbox/2026-02-05 闪念笔记.md",
+    "00_Inbox/2026-02-04 闪念笔记.md",
+    "01_Literature/Books/深入剖析Kubernetes/24-本地持久化卷(LocalPersistentVolume).md",
+    "01_Literature/Books/深入剖析Kubernetes/23-PV、PVC、StorageClass简介.md",
+    "Templates/文献笔记模板.md",
+    "01_Literature/Books/深入剖析Kubernetes/attachments/Pasted image 20260205114605.png",
+    "01_Literature/Books/深入剖析Kubernetes/attachments/Pasted image 20260205114524.png",
+    "01_Literature/Books/深入剖析Kubernetes/attachments",
+    "01_Literature/Books/深入剖析Kubernetes/06-重新认识Docker容器.md",
+    "01_Literature/Books/深入剖析Kubernetes/21-KubernetesRBAC文章的核心是一个实战.md",
+    "00_Inbox/2026-02-03 闪念笔记.md",
+    "01_Literature/Books/凤凰架构/55-服务网格数据平面与控制平面的实现.md",
+    "01_Literature/Books/凤凰架构/54-分布式通信的演进与服务网格的诞生.md",
+    "01_Literature/Books/凤凰架构/53-默认调度器架构.md",
+    "01_Literature/Books/凤凰架构/52-Kubernetes资源模型与调度器设计.md",
+    "01_Literature/Books/凤凰架构/51-Kubernetes存储生态系统.md",
+    "01_Literature/Books/凤凰架构/50-Kubernetes存储扩展架构.md",
+    "01_Literature/Books/凤凰架构/49-Kubernetes存储设计理念.md",
+    "01_Literature/Books/凤凰架构/48-容器网络与生态CNM与CNI的竞争.md",
+    "01_Literature/Books/凤凰架构/47-虚拟化网络设备与容器通信原理.md",
+    "01_Literature/Books/凤凰架构/46-linux网络通信基础.md",
+    "01_Literature/Books/凤凰架构/45-Operator与OAM.md",
+    "01_Literature/Books/凤凰架构/44-应用为中心的封装.md",
+    "01_Literature/Books/凤凰架构/43-系统应用集群的封装.md",
+    "01_Literature/Books/凤凰架构/42-容器根基三层隔离机制.md",
+    "01_Literature/Books/凤凰架构/41-云原生不可变基础设施.md",
+    "01_Literature/Books/凤凰架构/40-聚合度量.md",
+    "01_Literature/Books/凤凰架构",
+    "01_Literature/Books/深入剖析Kubernetes",
+    "01_Literature/Books",
+    "未命名",
+    "05_Archives",
+    "04_Projects",
+    "03_Maps",
+    "02_Permannent",
+    "00_Inbox",
+    "01_Literature/Nosql/attachments/Pasted image 20241010102624.png",
     "attachments/Pasted image 20240123105933.png",
-    "cleanup_root_images.ps1",
     "attachments/Pasted image 20240124101329.png",
     "attachments/Pasted image 20240124104327.png",
     "attachments/Pasted image 20240124105353.png",
-    "未命名.base",
-    "未命名 1.base",
-    "未命名 3.base",
-    "未命名 2.base",
     "c7163fc9c17df62c20d982a7c455716.png",
-    "mysql/attachments/Pasted image 20250313161923.png",
-    "java/attachments/Pasted image 20250424183311.png",
-    "Nosql/attachments/Pasted image 20241012150916.png",
-    "java/spring源码系列/attachments/Pasted image 20240719172803.png",
-    "Reading Book/attachments",
-    "网络协议/attachments",
-    "消息队列/attachments",
+    "01_Literature/mysql/attachments/Pasted image 20250313161923.png",
+    "01_Literature/java/attachments/Pasted image 20250424183311.png",
     "Untitled.canvas"
   ]
 }

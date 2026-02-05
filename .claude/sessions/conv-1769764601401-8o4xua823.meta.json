@@ -1,0 +1,19 @@
+{
+  "id": "conv-1769764601401-8o4xua823",
+  "title": "Split Markdown into linked card notes using tem...",
+  "titleGenerationStatus": "success",
+  "createdAt": 1769764601407,
+  "updatedAt": 1769765313916,
+  "lastResponseAt": 1769765001920,
+  "sessionId": "7ec0b787-9953-4900-9862-dc4e1cab069e",
+  "sdkSessionId": "7ec0b787-9953-4900-9862-dc4e1cab069e",
+  "usage": {
+    "model": "sonnet",
+    "inputTokens": 8,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 20468,
+    "contextWindow": 200000,
+    "contextTokens": 20476,
+    "percentage": 10
+  }
+}

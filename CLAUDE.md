@@ -1,4 +1,4 @@
-﻿# CLAUDE.md
+# CLAUDE.md
 
 本文件为 Claude Code (claude.ai/code) 在此仓库中工作时提供指导。
 
@@ -53,7 +53,9 @@
 模板结构：
 ```markdown
 ---
-tags: [#待整理]
+tags: 
+- tag1
+- tag2
 created: {{date}} {{time}}
 ---
 

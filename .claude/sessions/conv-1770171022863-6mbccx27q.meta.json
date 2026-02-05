@@ -1,0 +1,19 @@
+{
+  "id": "conv-1770171022863-6mbccx27q",
+  "title": "Remove prefix from K8s filenames",
+  "titleGenerationStatus": "success",
+  "createdAt": 1770171022863,
+  "updatedAt": 1770171105318,
+  "lastResponseAt": 1770171061757,
+  "sessionId": "8d945f64-9b81-4180-8a39-b3c88c01c325",
+  "sdkSessionId": "8d945f64-9b81-4180-8a39-b3c88c01c325",
+  "usage": {
+    "model": "sonnet",
+    "inputTokens": 8,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 21460,
+    "contextWindow": 200000,
+    "contextTokens": 21468,
+    "percentage": 11
+  }
+}

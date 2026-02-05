@@ -1,0 +1,19 @@
+{
+  "id": "conv-1770171201558-4extctsqc",
+  "title": "Rename files in Phoenix Architecture folder",
+  "titleGenerationStatus": "success",
+  "createdAt": 1770171201558,
+  "updatedAt": 1770171267577,
+  "lastResponseAt": 1770171251785,
+  "sessionId": "1264c1f7-30e1-4984-9ad2-fe5a7c79cf29",
+  "sdkSessionId": "1264c1f7-30e1-4984-9ad2-fe5a7c79cf29",
+  "usage": {
+    "model": "sonnet",
+    "inputTokens": 274,
+    "cacheCreationInputTokens": 2439,
+    "cacheReadInputTokens": 32187,
+    "contextWindow": 200000,
+    "contextTokens": 34900,
+    "percentage": 17
+  }
+}

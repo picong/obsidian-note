@@ -3,16 +3,15 @@
   "url-into-selection",
   "obsidian-annotator",
   "obsidian-translator",
-  "obsidian-icons-plugin",
-  "tag-wrangler",
   "obsidian-admonition",
   "obsidian-excalidraw-plugin",
-  "dataview",
-  "table-editor-obsidian",
-  "calendar",
-  "remotely-save",
   "mehrmaid",
   "obsidian42-brat",
   "claudian",
-  "pdf-plus"
+  "pdf-plus",
+  "obsidian-minimal-settings",
+  "obsidian-icons-plugin",
+  "tag-wrangler",
+  "calendar",
+  "mermaid-popup"
 ]
