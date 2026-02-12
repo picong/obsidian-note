@@ -63,7 +63,7 @@ graph TD
 
 ### 3. 两阶段处理的代码层面实现
 - AttachDetachController(第一阶段): 轮询Pod上面的PV是否需要进行Attach/Detach操作。该控制器运行在Master节点上面。
-- VolumeManagerReconciler(第二阶段)：因为Mout/Unmount操作是要发生在Pod对应的宿主机上，所以该控制循环必须是kubelet的一部，但是为了不影响主控制循环，所以该控制循环是一个一个独立于主控制循环而存在的协程里面运行的。
+- VolumeManagerReconciler(第二阶段)：因为Mout/Unmount操作是要发生在Pod对应的宿主机上，所以该控制循环必须是kubelet的一部分，但是为了不影响主控制循环，所以该控制循环是一个独立于主控制循环而存在的协程里面运行的。
 
 ### 4. StorageClass简介
 - Dynamic Provisioning：通过StorageClass作为PV的模版，当k8s里面声明创建PVC的时候，就会根据PVC中的StorageClassName字段对应的StorageClass来创建PV。

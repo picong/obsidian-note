@@ -1,0 +1,188 @@
+/* 首页样式 - 极简风格 */
+
+/* 首页容器 */
+.homepage .markdown-preview-view,
+.homepage .markdown-source-view.mod-cm6 .cm-content {
+    padding: 2rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 标题样式 - 自动居中 */
+.homepage h1 {
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin: 2rem 0 0.5rem 0;
+    color: var(--text-normal);
+    text-align: center;
+}
+
+.homepage h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    margin: 3rem 0 1.5rem 0;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* 副标题样式 - 居中 */
+.homepage h1 + p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+/* Callout 卡片样式 */
+.homepage .callout {
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--background-secondary);
+    border-left: 4px solid var(--interactive-accent);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.homepage .callout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.homepage .callout-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.homepage .callout-content {
+    line-height: 1.8;
+}
+
+.homepage .callout-content strong {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-normal);
+    font-size: 1rem;
+}
+
+/* 链接样式 */
+.homepage a.internal-link {
+    text-decoration: none;
+    color: var(--link-color);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.homepage a.internal-link:hover {
+    background: var(--background-modifier-hover);
+    color: var(--link-color-hover);
+}
+
+/* 分隔符样式 */
+.homepage hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--background-modifier-border), transparent);
+    margin: 2rem 0;
+}
+
+/* 表格样式 - 居中 */
+.homepage table {
+    border: none;
+    margin: 2rem auto;
+    border-collapse: separate;
+    border-spacing: 0.5rem;
+}
+
+.homepage table td {
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    background: var(--background-secondary);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.homepage table td:hover {
+    background: var(--background-modifier-hover);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+.homepage table a {
+    color: var(--text-normal);
+    text-decoration: none;
+}
+
+/* 专题索引段落 - 居中 */
+.homepage h2 + p {
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* 底部引用和日期 - 居中 */
+.homepage > p:last-of-type,
+.homepage > p:nth-last-of-type(2) {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 2rem;
+}
+
+/* 引用块样式 */
+.homepage blockquote {
+    border-left: 3px solid var(--interactive-accent);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+/* Banner 插件兼容 */
+.homepage .obsidian-banner-wrapper {
+    margin-bottom: 2rem;
+}
+
+/* 移除不必要的间距 */
+.homepage .markdown-preview-view > *:first-child {
+    margin-top: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .homepage .markdown-preview-view,
+    .homepage .markdown-source-view.mod-cm6 .cm-content {
+        padding: 1rem 2rem;
+    }
+
+    .homepage h1 {
+        font-size: 2.5rem;
+    }
+
+    .homepage h2 {
+        font-size: 1.5rem;
+    }
+
+    .homepage table {
+        font-size: 0.9rem;
+    }
+
+    .homepage table td {
+        padding: 1rem;
+    }
+}
+
+/* 阅读模式和编辑模式通用样式 */
+.homepage .cm-line {
+    font-family: var(--font-text);
+}
+
+/* 确保链接在编辑模式下也正确显示 */
+.homepage .cm-hmd-internal-link {
+    color: var(--link-color);
+}

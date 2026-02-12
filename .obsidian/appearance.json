@@ -1,7 +1,7 @@
 {
-  "accentColor": "#5f8295",
-  "cssTheme": "Catppuccin",
-  "theme": "moonstone",
+  "accentColor": "#4a8cb0",
+  "cssTheme": "Obsidian gruvbox",
+  "theme": "obsidian",
   "showViewHeader": true,
   "nativeMenus": false,
   "translucency": false,
@@ -10,5 +10,8 @@
   "interfaceFontFamily": "",
   "textFontFamily": "Maple Mono NF CN",
   "monospaceFontFamily": "",
-  "showRibbon": true
+  "showRibbon": true,
+  "enabledCssSnippets": [
+    "homepage"
+  ]
 }
