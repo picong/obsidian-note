@@ -42,7 +42,7 @@ graph TD
 
 - 绑定成功的条件：
 	- PVC要求的容量跟PV的容量相匹配
-	- PVC的StorageClassname属性跟PV的StorageClassName一致，如果StorageClass存在的话就是PV的创建就不需要运维手动操作(Dynamic Provisioning)，这部分内容请参考[[Dynamic/Static Provioning]]。
+	- PVC的StorageClassname属性跟PV的StorageClassName一致，如果StorageClass存在的话就是PV的创建就不需要运维手动操作(Dynamic Provisioning)，这部分内容请参考[[StorageClass简介]]。
 
 ---
 ## 参考文献

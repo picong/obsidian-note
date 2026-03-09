@@ -6,7 +6,106 @@
   "hideUnresolved": false,
   "showOrphans": false,
   "collapse-color-groups": false,
-  "colorGroups": [],
+  "colorGroups": [
+    {
+      "query": "path:k8s/",
+      "color": {
+        "a": 1,
+        "rgb": 5419488
+      }
+    },
+    {
+      "query": "path:java/",
+      "color": {
+        "a": 1,
+        "rgb": 16744192
+      }
+    },
+    {
+      "query": "path:go/",
+      "color": {
+        "a": 1,
+        "rgb": 5570815
+      }
+    },
+    {
+      "query": "path:dubbo/",
+      "color": {
+        "a": 1,
+        "rgb": 11141375
+      }
+    },
+    {
+      "query": "path:mysql/",
+      "color": {
+        "a": 1,
+        "rgb": 5025616
+      }
+    },
+    {
+      "query": "path:分布式算法/",
+      "color": {
+        "a": 1,
+        "rgb": 16737894
+      }
+    },
+    {
+      "query": "path:concurrency/",
+      "color": {
+        "a": 1,
+        "rgb": 16766720
+      }
+    },
+    {
+      "query": "path:spring源码系列/",
+      "color": {
+        "a": 1,
+        "rgb": 14524637
+      }
+    },
+    {
+      "query": "path:消息队列/",
+      "color": {
+        "a": 1,
+        "rgb": 10824234
+      }
+    },
+    {
+      "query": "path:网络协议/",
+      "color": {
+        "a": 1,
+        "rgb": 7048739
+      }
+    },
+    {
+      "query": "path:linux/",
+      "color": {
+        "a": 1,
+        "rgb": 3166515
+      }
+    },
+    {
+      "query": "path:git/",
+      "color": {
+        "a": 1,
+        "rgb": 16744272
+      }
+    },
+    {
+      "query": "path:Excalidraw/",
+      "color": {
+        "a": 1,
+        "rgb": 9868950
+      }
+    },
+    {
+      "query": "path:Work\\ note/",
+      "color": {
+        "a": 1,
+        "rgb": 8421504
+      }
+    }
+  ],
   "collapse-display": false,
   "showArrow": false,
   "textFadeMultiplier": 0.7,
@@ -17,6 +116,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.2726859917360031,
+  "scale": 0.1945002269061592,
   "close": false
 }

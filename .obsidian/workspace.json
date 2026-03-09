@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_Permanent/PV实现容器内持久存储的两阶段流程.md",
+                "file": "首页.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PV实现容器内持久存储的两阶段流程"
+              "title": "首页"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 329
+    "width": 342.5
   },
   "right": {
     "id": "3f3db18367300875",
@@ -94,7 +94,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "00_Inbox/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "README 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
@@ -212,22 +211,24 @@
   },
   "active": "e7a7b303c61786dc",
   "lastOpenFiles": [
-    "01_Literature/Books/深入剖析Kubernetes/23-PV、PVC、StorageClass简介.md",
-    "01_Literature/Books/深入剖析Kubernetes/24-本地持久化卷(LocalPersistentVolume).md",
-    "02_Permanent/PVC和PV存在的意义.md",
-    "02_Permanent/PVC-PV绑定原理.md",
-    "首页.md",
-    "00_Inbox/README.md",
+    "00_Inbox/未命名.md",
+    "01_Literature/Books/深入剖析Kubernetes/26-CSI插件编写指南.md",
+    "01_Literature/Books/深入剖析Kubernetes/25-FlexVolume与CSI.md",
     "00_Inbox/2026-02-05 闪念笔记.md",
+    "01_Literature/Books/深入剖析Kubernetes/24-本地持久化卷(LocalPersistentVolume).md",
+    "01_Literature/Books/深入剖析Kubernetes/23-PV、PVC、StorageClass简介.md",
+    "02_Permanent/StorageClass简介.md",
+    "02_Permanent/README.md",
+    "首页.md",
+    "02_Permanent/PVC-PV绑定原理.md",
+    "02_Permanent/PV实现容器内持久存储的两阶段流程.md",
+    "01_Literature/README.md",
+    "02_Permanent/PVC和PV存在的意义.md",
+    "00_Inbox/README.md",
     "00_Inbox/2026-02-03 闪念笔记.md",
     "00_Inbox/2026-02-04 闪念笔记.md",
-    "01_Literature/Books/深入剖析Kubernetes/25-FlexVolume与CSI.md",
-    "01_Literature/Books/深入剖析Kubernetes/26-CSI插件编写指南.md",
-    "02_Permanent/PV实现容器内持久存储的两阶段流程.md",
     "Templates/永久笔记模板.md",
-    "02_Permanent/README.md",
     "01_Literature/Books/深入剖析Kubernetes/未命名.md",
-    "01_Literature/README.md",
     "Templates/文献笔记模板.md",
     "03_Maps/首页使用说明.md",
     "03_Maps/首页索引.md",
@@ -241,8 +242,6 @@
     "01_Literature/Books/深入剖析Kubernetes/attachments/Pasted image 20260205114605.png",
     "01_Literature/Books/深入剖析Kubernetes/attachments/Pasted image 20260205114524.png",
     "01_Literature/Books/深入剖析Kubernetes/attachments",
-    "01_Literature/Books/深入剖析Kubernetes/21-KubernetesRBAC文章的核心是一个实战.md",
-    "01_Literature/Books/凤凰架构/55-服务网格数据平面与控制平面的实现.md",
     "01_Literature/Books/凤凰架构",
     "01_Literature/Books/深入剖析Kubernetes",
     "01_Literature/Books",
